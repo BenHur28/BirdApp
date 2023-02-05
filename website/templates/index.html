@@ -2,5 +2,18 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-<h1>Welcome to BirdApp</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-4">Hello</div>
+        <div class="col-4">
+            <form method="POST" id="tweet-area">
+                <label for="tweet-text" class="form-label">Whats Happening?</label>
+                <textarea class="form-control" id="tweet-text" name="tweet-text" rows="4"></textarea>
+                <br>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="col-4">Hello</div>
+    </div>
+</div>
 {% endblock %}
