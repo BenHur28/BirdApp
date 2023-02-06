@@ -12,6 +12,32 @@
                 <br>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            {% for tweet in current_user.tweets %}
+            <div class="container-fluid">
+                <p class="card-text">{{ tweet.content }}</p>
+                <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
+                <div class="row">
+                    <div class="col-4">
+                        <a href="">
+                            <i class="fa-regular fa-comment"></i>
+                            <span>0</span>
+                        </a>
+                    </div>
+                    <div class="col-4">
+                        <a href="">
+                            <i class="fa fa-retweet"></i>
+                            <span>0</span>
+                        </a>
+                    </div>
+                    <div class="col-4">
+                        <a href="">
+                            <i class="fa-regular fa-heart"></i>
+                            <span>0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
         <div class="col-4">Hello</div>
     </div>

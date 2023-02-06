@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for, request, redirect
 from flask_login import current_user
-from .models import Tweets
+from .models import Tweets, User
 from . import db
 views = Blueprint('views', __name__)
 
@@ -12,7 +12,8 @@ def home():
 
     if request.method == 'POST':
         text_content = request.form.get('tweet-text')
-        new_tweet = Tweets(content=text_content)
+        new_tweet = Tweets(content=text_content,
+                           user_id=current_user.id)
         db.session.add(new_tweet)
         db.session.commit()
 
