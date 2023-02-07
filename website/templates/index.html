@@ -12,8 +12,9 @@
                 <br>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
-            {% for tweet in current_user.tweets %}
+            {% for tweet in current_user.followed_posts() %}
             <div class="container-fluid">
+                <a href="{{ url_for('views.view_profile', user_id=current_user.id) }}">{{tweet.tweet_author.username}}</a>
                 <p class="card-text">{{ tweet.content }}</p>
                 <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
                 <div class="row">

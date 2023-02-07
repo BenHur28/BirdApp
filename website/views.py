@@ -20,4 +20,10 @@ def home():
     return render_template("index.html", current_user=current_user)
 
 
-
+@views.route('/profile/<int:user_id>', methods=['GET', 'POST'])
+def view_profile(user_id):
+    user = User.query.get(user_id)
+    if request.method == 'POST':
+        current_user.follow(user)
+        db.session.commit()
+    return render_template("profile.html", current_user=user)
