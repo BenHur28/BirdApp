@@ -1,0 +1,22 @@
+a:link {
+  background-color: transparent;
+  text-decoration: none;
+}
+
+.fa {
+color: rgb(139, 152, 165);
+}
+
+.sub-buttons.col-4 {
+text-align:center;
+}
+
+span{
+  color: rgb(139, 152, 165)
+}
+
+.tweet-body.container-fluid{
+    margin-top: 3rem;
+    padding: 0
+}
+

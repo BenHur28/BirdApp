@@ -17,6 +17,8 @@ class User(UserMixin, db.Model):
 
     tweets = relationship("Tweets", back_populates="tweet_author")
 
+    replies = relationship("Replies", back_populates="reply_author")
+
     followed = db.relationship('User', secondary=followers,
                                primaryjoin=(followers.c.follower_id == id),
                                secondaryjoin=(followers.c.followed_id == id),
@@ -50,3 +52,17 @@ class Tweets(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     tweet_author = relationship("User", back_populates="tweets")
+
+    replies = relationship("Replies", back_populates="parent_tweet")
+
+
+class Replies(db.Model):
+    __tablename__ = "replies"
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(255))
+
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    tweet_id = db.Column(db.Integer, db.ForeignKey("tweets.id"))
+
+    reply_author = relationship("User", back_populates="replies")
+    parent_tweet = relationship("Tweets", back_populates="replies")

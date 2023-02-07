@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for, request, redirect
 from flask_login import current_user
-from .models import Tweets, User
+from .models import Tweets, User, Replies
 from . import db
 views = Blueprint('views', __name__)
 
@@ -27,3 +27,17 @@ def view_profile(user_id):
         current_user.follow(user)
         db.session.commit()
     return render_template("profile.html", current_user=user)
+
+
+@views.route('/reply/<int:tweet_id>', methods=['GET', 'POST'])
+def reply(tweet_id):
+    tweet = Tweets.query.get(tweet_id)
+    if request.method == 'POST':
+        text_content = request.form.get('reply-text')
+        new_reply = Replies(content=text_content,
+                            reply_author=current_user,
+                            parent_tweet=tweet)
+        db.session.add(new_reply)
+        db.session.commit()
+        return render_template("tweet.html", current_user=current_user, tweet=tweet)
+    return render_template("tweet.html", current_user=current_user, tweet=tweet)

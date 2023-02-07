@@ -6,20 +6,13 @@
     <div class="row">
         <div class="col-4">Hello</div>
         <div class="col-4">
-            <form method="POST" id="tweet-area">
-                <label for="tweet-text" class="form-label">Whats Happening?</label>
-                <textarea class="form-control" id="tweet-text" name="tweet-text" rows="4"></textarea>
-                <br>
-                <button type="submit" class="btn btn-primary">Tweet</button>
-            </form>
-            {% for tweet in current_user.followed_posts() %}
             <div class="tweet-body container-fluid">
                 <a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.tweet_author.username}}</a>
                 <p class="card-text">{{ tweet.content }}</p>
                 <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
                 <div class="row">
                     <div class="col-4 sub-buttons">
-                        <a href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
+                        <a href="">
                             <i class="fa fa-regular fa-comment"></i>
                             <span>0</span>
                         </a>
@@ -38,6 +31,14 @@
                     </div>
                 </div>
             </div>
+            <form method="POST" id="reply-area">
+                <label for="reply-text" class="form-label">Whats Happening?</label>
+                <textarea class="form-control" id="reply-text" name="reply-text" rows="4"></textarea>
+                <br>
+                <button type="submit" class="btn btn-primary">Tweet</button>
+            </form>
+            {% for reply in tweet.replies %}
+            <p class="card-text">{{ reply.content }}</p>
             {% endfor %}
         </div>
         <div class="col-4">Hello</div>
