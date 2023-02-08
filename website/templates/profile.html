@@ -2,8 +2,55 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-<h1>{{ current_user.username }}</h1>
-<form method="POST">
-  <button type="submit" class="btn btn-primary">Follow</button>
-</form>
+<div class="container">
+    <div class="row">
+        <div class="col-3">Hello</div>
+        <div class="col-5">
+            <h1>{{ user.username }}</h1>
+            {% for tweet in user.tweets %}
+            <div class="tweet-body container-fluid">
+                <h3><a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.tweet_author.username}}</a></h3>
+                <p class="card-text">{{ tweet.content }}</p>
+                {% if tweet.image_src %}
+                <img src="{{ tweet.image_src }}" onerror="this.style.display='none'" class="card-img-top">
+                {% else %}
+                <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
+                {% endif %}
+                <div class="row">
+                    <div class="col-4 sub-buttons">
+                        <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
+                            <i class="fa fa-regular fa-comment"></i>
+                            <span>0</span>
+                        </a>
+                    </div>
+                    <div class="col-4 sub-buttons">
+                        <a class="icons" href="">
+                            <i class="fa fa fa-retweet"></i>
+                            <span>0</span>
+                        </a>
+                    </div>
+                    <div class="col-4 sub-buttons">
+                        <a class="icons" href="">
+                            <i class="fa fa-regular fa-heart"></i>
+                            <span>0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <h5 class="card-title">Who to follow</h5>
+                {% for user in users %}
+                <div class="card-body">
+                    <h5>{{ user.username }}</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Follow</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -49,6 +49,7 @@ class Tweets(db.Model):
     content = db.Column(db.String(255))
     likes = db.Column(db.Integer)
     retweets = db.Column(db.Integer)
+    image_src = db.Column(db.String(255))
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     tweet_author = relationship("User", back_populates="tweets")

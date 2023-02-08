@@ -1,18 +1,61 @@
-a:link {
-  background-color: transparent;
-  text-decoration: none;
+body{
+    background-color: rgb(21,32,43);
+    color: rgb(247, 249, 249);
+}
+
+textarea.form-control, textarea.form-control:focus{
+    color: rgb(247, 249, 249);
+    background-color: transparent;
+    overflow: auto;
+    border-radius: 0;
+    border: none;
+    resize: none;
+    border-width: 0px;
+    -webkit-box-shadow: none;
+}
+
+.navbar{
+    margin-bottom: 3%;
+}
+
+img.card-img-top{
+    padding: 1rem;
+    border-radius: 10%;
+}
+
+p{
+    color: rgb(247, 249, 249);
+}
+
+h3 a{
+    color: rgb(247, 249, 249);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+h5 {
+    color: rgb(247, 249, 249);
+}
+
+h5.card-title{
+    padding: 16px;
+}
+
+a.icons:link {
+    background-color: transparent;
+    text-decoration: none;
 }
 
 .fa {
-color: rgb(139, 152, 165);
+    color: rgb(139, 152, 165);
 }
 
 .sub-buttons.col-4 {
-text-align:center;
+    text-align:center;
 }
 
 span{
-  color: rgb(139, 152, 165)
+    color: rgb(139, 152, 165)
 }
 
 .tweet-body.container-fluid{
@@ -20,3 +63,10 @@ span{
     padding: 0
 }
 
+.card{
+    background-color: rgb(30, 39, 50)
+}
+
+.tweet{
+
+}

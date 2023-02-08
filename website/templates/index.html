@@ -4,34 +4,39 @@
 {% block body %}
 <div class="container">
     <div class="row">
-        <div class="col-4">Hello</div>
-        <div class="col-4">
-            <form method="POST" id="tweet-area">
-                <label for="tweet-text" class="form-label">Whats Happening?</label>
-                <textarea class="form-control" id="tweet-text" name="tweet-text" rows="4"></textarea>
+        <div class="col-3">Hello</div>
+        <div class="col-5">
+            <form method="POST" enctype="multipart/form-data" id="tweet-area">
+                <label for="tweet-text" class="form-label"></label>
+                <textarea class="form-control" id="tweet-text" name="tweet-text" rows="6">What's Happening?</textarea>
                 <br>
-                <button type="submit" class="btn btn-primary">Tweet</button>
+                <input type="text" name="image_src"/>
+                <button type="submit" class="btn btn-primary tweet">Tweet</button>
             </form>
             {% for tweet in current_user.followed_posts() %}
             <div class="tweet-body container-fluid">
-                <a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.tweet_author.username}}</a>
+                <h3><a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.tweet_author.username}}</a></h3>
                 <p class="card-text">{{ tweet.content }}</p>
+                {% if tweet.image_src %}
+                <img src="{{ tweet.image_src }}" onerror="this.style.display='none'" class="card-img-top">
+                {% else %}
                 <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
+                {% endif %}
                 <div class="row">
                     <div class="col-4 sub-buttons">
-                        <a href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
+                        <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
                             <i class="fa fa-regular fa-comment"></i>
                             <span>0</span>
                         </a>
                     </div>
                     <div class="col-4 sub-buttons">
-                        <a href="">
+                        <a class="icons" href="">
                             <i class="fa fa fa-retweet"></i>
                             <span>0</span>
                         </a>
                     </div>
                     <div class="col-4 sub-buttons">
-                        <a href="">
+                        <a class="icons" href="">
                             <i class="fa fa-regular fa-heart"></i>
                             <span>0</span>
                         </a>
@@ -40,7 +45,20 @@
             </div>
             {% endfor %}
         </div>
-        <div class="col-4">Hello</div>
+        <div class="col-4">
+            <div class="card">
+                <h5 class="card-title">Who to follow</h5>
+                {% for user in users %}
+                <div class="card-body">
+                    <h5>{{ user.username }}</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}">
+                        <button type="submit" class="btn btn-primary">Follow</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
