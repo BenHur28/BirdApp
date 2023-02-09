@@ -25,19 +25,24 @@ def home():
     users = []
     for x in range(1,5):
         user = random.choice(User.query.all())
-        if user not in users and user != current_user and not current_user.is_following(user):
+        if (user not in users) and (user != current_user) and (not current_user.is_following(user)):
             users.append(user)
-
-    return render_template("index.html", current_user=current_user, users=users)
+    list_of_tweets = []
+    for tweet in current_user.followed_posts():
+        list_of_tweets.insert(0,tweet)
+    return render_template("index.html", current_user=current_user, users=users, tweets=list_of_tweets)
 
 
 @views.route('/profile/<int:user_id>', methods=['GET', 'POST'])
 def view_profile(user_id):
     user = User.query.get(user_id)
+    list_of_tweets = []
+    for tweet in user.tweets:
+        list_of_tweets.insert(0,tweet)
     if request.method == 'POST':
         current_user.follow(user)
         db.session.commit()
-    return render_template("profile.html", user=user)
+    return render_template("profile.html", user=user, tweets=list_of_tweets)
 
 
 @views.route('/profile/<int:user_id>', methods=['POST'])

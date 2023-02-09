@@ -1,6 +1,11 @@
 body{
     background-color: rgb(21,32,43);
     color: rgb(247, 249, 249);
+    font-size: 16px;
+}
+
+#tweet-area{
+    margin: 0 10%
 }
 
 textarea.form-control, textarea.form-control:focus{
@@ -14,24 +19,28 @@ textarea.form-control, textarea.form-control:focus{
     -webkit-box-shadow: none;
 }
 
-.navbar{
-    margin-bottom: 3%;
+.form-control::placeholder {
+    color: rgb(247, 249, 249);
 }
 
-img.card-img-top{
-    padding: 1rem;
-    border-radius: 10%;
+.navbar{
+    margin-bottom: 3%;
+    background-color: rgb(30, 39, 50);
+}
+
+.nav-link, .navbar-brand{
+    color: rgb(247, 249, 249);
+}
+
+.nav-link:hover, .navbar-brand:hover{
+    color: rgb(247, 249, 249);
+    text-decoration: underline;
 }
 
 p{
     color: rgb(247, 249, 249);
 }
 
-h3 a{
-    color: rgb(247, 249, 249);
-    background-color: transparent;
-    text-decoration: none;
-}
 
 h5 {
     color: rgb(247, 249, 249);
@@ -59,8 +68,35 @@ span{
 }
 
 .tweet-body.container-fluid{
-    margin-top: 3rem;
-    padding: 0
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-color: rgb(56, 68, 77);
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-width: 1px;
+}
+
+img.card-img-top{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-radius: 35px;
+    max-width: 80%;
+    max-height: 600px;
+    margin:auto;
+    display:block;
+}
+
+p.card-text{
+    margin-left: 10%;
+    margin-bottom: 5px;
+}
+
+h3 a{
+    color: rgb(247, 249, 249);
+    background-color: transparent;
+    text-decoration: none;
+    margin-left: 10%;
 }
 
 .card{
@@ -68,5 +104,15 @@ span{
 }
 
 .tweet{
-
+    border-color: rgb(56, 68, 77);
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-top-style: solid;
+    border-width: 1px;
 }
+
+.signup-login {
+    width: 25%
+}
+

@@ -2,20 +2,25 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="container content">
     <div class="row">
-        <div class="col-3">Hello</div>
-        <div class="col-5">
-            <form method="POST" enctype="multipart/form-data" id="tweet-area">
-                <label for="tweet-text" class="form-label"></label>
-                <textarea class="form-control" id="tweet-text" name="tweet-text" rows="6">What's Happening?</textarea>
-                <br>
-                <input type="text" name="image_src"/>
-                <button type="submit" class="btn btn-primary tweet">Tweet</button>
-            </form>
-            {% for tweet in current_user.followed_posts() %}
+        <div class="col-2">Hello</div>
+        <div class="col-6">
+            <div class="tweet">
+                <form method="POST" enctype="multipart/form-data" id="tweet-area">
+                    <label for="tweet-text" class="form-label"></label>
+                    <textarea class="form-control" id="tweet-text" name="tweet-text"
+                              rows="4" placeholder="What's Happening?"></textarea>
+                    <br>
+                    <input type="text" name="image_src"/>
+                    <button type="submit" class="btn btn-primary tweet">Tweet</button>
+                </form>
+            </div>
+            {% for tweet in tweets %}
             <div class="tweet-body container-fluid">
-                <h3><a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.tweet_author.username}}</a></h3>
+                <h3>
+                    <a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.tweet_author.username}}</a>
+                </h3>
                 <p class="card-text">{{ tweet.content }}</p>
                 {% if tweet.image_src %}
                 <img src="{{ tweet.image_src }}" onerror="this.style.display='none'" class="card-img-top">

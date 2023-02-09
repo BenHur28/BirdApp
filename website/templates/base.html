@@ -16,7 +16,7 @@
     <title>{% block title %}BirdApp{% endblock %}</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ url_for('views.home') }}">BirdApp</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -26,7 +26,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ url_for('views.home') }}">Home</a>
+                    <a class="nav-link" aria-current="page" href="{{ url_for('views.home') }}">Home</a>
                 </li>
                 {% if not current_user.is_authenticated: %}
                 <li class="nav-item">
@@ -45,6 +45,6 @@
     </div>
 </nav>
 
-<div class="container">{% block body %} {% endblock %}</div>
+{% block body %} {% endblock %}
 </body>
 </html>
