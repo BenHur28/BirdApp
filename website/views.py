@@ -35,28 +35,38 @@ def home():
 
 @views.route('/profile/<int:user_id>', methods=['GET', 'POST'])
 def view_profile(user_id):
-    user = User.query.get(user_id)
+    user_query = User.query.get(user_id)
     list_of_tweets = []
-    for tweet in user.tweets:
+    users = []
+    for x in range(1,5):
+        user = random.choice(User.query.all())
+        if (user not in users) and (user != current_user) and (not current_user.is_following(user)):
+            users.append(user)
+    for tweet in user_query.tweets:
         list_of_tweets.insert(0,tweet)
     if request.method == 'POST':
-        current_user.follow(user)
+        current_user.follow(user_query)
         db.session.commit()
-    return render_template("profile.html", user=user, tweets=list_of_tweets)
+    return render_template("profile.html", user=user_query, users=users, tweets=list_of_tweets)
 
 
-@views.route('/profile/<int:user_id>', methods=['POST'])
+@views.route('/<int:user_id>', methods=['POST'])
 def follow_profile(user_id):
     user = User.query.get(user_id)
     if request.method == 'POST':
         current_user.follow(user)
         db.session.commit()
-        return redirect(url_for('view_profile', user=user))
+        return redirect(url_for('views.home', current_user=current_user))
 
 
 @views.route('/reply/<int:tweet_id>', methods=['GET', 'POST'])
 def reply(tweet_id):
     tweet = Tweets.query.get(tweet_id)
+    users = []
+    for x in range(1,5):
+        user = random.choice(User.query.all())
+        if (user not in users) and (user != current_user) and (not current_user.is_following(user)):
+            users.append(user)
     if request.method == 'POST':
         text_content = request.form.get('reply-text')
         new_reply = Replies(content=text_content,
@@ -64,5 +74,12 @@ def reply(tweet_id):
                             parent_tweet=tweet)
         db.session.add(new_reply)
         db.session.commit()
-        return render_template("tweet.html", current_user=current_user, tweet=tweet)
-    return render_template("tweet.html", current_user=current_user, tweet=tweet)
+    return render_template("tweet.html", users=users, current_user=current_user, tweet=tweet)
+
+
+@views.route('/delete/<int:tweet_id>')
+def delete_tweet(tweet_id):
+    tweet_to_delete = Tweets.query.get(tweet_id)
+    db.session.delete(tweet_to_delete)
+    db.session.commit()
+    return redirect(url_for('views.home'))

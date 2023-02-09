@@ -4,7 +4,7 @@
 {% block body %}
 <div class="container content">
     <div class="row">
-        <div class="col-2">Hello</div>
+        <div class="col-2">Hello {{ current_user.username }}</div>
         <div class="col-6">
             <h1>{{ user.username }}</h1>
             {% for tweet in tweets %}
