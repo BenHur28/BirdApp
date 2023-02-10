@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Home / BirdApp{% endblock %}
 
 {% block body %}
 <div class="container content">
     <div class="row">
-        <div class="col-2">Hello {{ current_user.username }}</div>
+        <div class="col-2 left-col">Hello {{ current_user.username }}</div>
         <div class="col-6">
             <div class="tweet">
                 <form method="POST" enctype="multipart/form-data" id="tweet-area">
@@ -27,6 +27,8 @@
                 {% else %}
                 <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
                 {% endif %}
+
+                {% if tweet.user_id == current_user.id %}
                 <div class="row">
                     <div class="col-3 sub-buttons">
                         <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
@@ -51,24 +53,46 @@
                             <i class="fa fa-solid fa-x"></i>
                         </a>
                     </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="col-4">
-            <div class="card">
-                <h5 class="card-title">Who to follow</h5>
-                {% for user in users %}
-                <div class="card-body">
-                    <h5>{{ user.username }}</h5>
-                    <p>With supporting text below as a natural lead-in to additional content.</p>
-                    <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}">
-                        <button type="submit" class="btn btn-primary">Follow</button>
-                    </form>
+                    {% else %}
+                    <div class="row">
+                        <div class="col-4 sub-buttons">
+                            <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
+                                <i class="fa fa-regular fa-comment"></i>
+                                <span>0</span>
+                            </a>
+                        </div>
+                        <div class="col-4 sub-buttons">
+                            <a class="icons" href="">
+                                <i class="fa fa fa-retweet"></i>
+                                <span>0</span>
+                            </a>
+                        </div>
+                        <div class="col-4 sub-buttons">
+                            <a class="icons" href="">
+                                <i class="fa fa-regular fa-heart"></i>
+                                <span>0</span>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
                 {% endfor %}
+            </div>
+            <div class="col-4 right-col">
+                <div class="card">
+                    <h5 class="card-title">Who to follow</h5>
+                    {% for user in users %}
+                    <div class="card-body">
+                        <h5>{{ user.username }}</h5>
+                        <p>With supporting text below as a natural lead-in to additional content.</p>
+                        <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}">
+                            <button type="submit" class="btn btn-primary">Follow</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
+    {% endblock %}

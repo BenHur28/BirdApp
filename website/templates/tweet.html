@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Reply / BirdApp{% endblock %}
 
 {% block body %}
 <div class="container content">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="tweet">
+            <div class="reply">
                 <form method="POST" enctype="multipart/form-data" id="tweet-area">
                     <label for="reply-text" class="form-label"></label>
                     <textarea class="form-control" id="reply-text" name="reply-text"
@@ -60,6 +60,7 @@
                 {% for user in users %}
                 <div class="card-body">
                     <h5>{{ user.username }}</h5>
+                    <p>With supporting text below as a natural lead-in to additional content.</p>
                     <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}">
                         <button type="submit" class="btn btn-primary">Follow</button>
                     </form>

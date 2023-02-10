@@ -59,6 +59,16 @@ def follow_profile(user_id):
         return redirect(url_for('views.home', current_user=current_user))
 
 
+@views.route('/profile_unfollow/<int:user_id>', methods=['POST'])
+def unfollow_profile(user_id):
+    user = User.query.get(user_id)
+    if request.method == 'POST':
+        current_user.unfollow(user)
+        print("hello")
+        db.session.commit()
+        return redirect(url_for('views.home', current_user=current_user))
+
+
 @views.route('/reply/<int:tweet_id>', methods=['GET', 'POST'])
 def reply(tweet_id):
     tweet = Tweets.query.get(tweet_id)

@@ -1,8 +1,44 @@
+/* Body Style */
+
 body{
     background-color: rgb(21,32,43);
     color: rgb(247, 249, 249);
     font-size: 16px;
 }
+
+p{
+    color: rgb(247, 249, 249);
+}
+
+/* Login and Signup Page */
+
+.signup-login {
+    width: 25%
+}
+
+/* Nav Bar */
+
+.navbar{
+    margin-bottom: 3%;
+    background-color: rgb(30, 39, 50);
+}
+
+.nav-link, .navbar-brand{
+    color: rgb(247, 249, 249);
+}
+
+.nav-link:hover, .navbar-brand:hover{
+    color: rgb(247, 249, 249);
+    text-decoration: underline;
+}
+
+/* Left Column */
+
+.left-col{
+
+}
+
+/* Middle Column */
 
 #tweet-area{
     margin: 0 10%
@@ -23,50 +59,6 @@ textarea.form-control, textarea.form-control:focus{
     color: rgb(247, 249, 249);
 }
 
-.navbar{
-    margin-bottom: 3%;
-    background-color: rgb(30, 39, 50);
-}
-
-.nav-link, .navbar-brand{
-    color: rgb(247, 249, 249);
-}
-
-.nav-link:hover, .navbar-brand:hover{
-    color: rgb(247, 249, 249);
-    text-decoration: underline;
-}
-
-p{
-    color: rgb(247, 249, 249);
-}
-
-
-h5 {
-    color: rgb(247, 249, 249);
-}
-
-h5.card-title{
-    padding: 16px;
-}
-
-a.icons:link {
-    background-color: transparent;
-    text-decoration: none;
-}
-
-.fa {
-    color: rgb(139, 152, 165);
-}
-
-.sub-buttons.col-3 {
-    text-align:center;
-}
-
-span{
-    color: rgb(139, 152, 165)
-}
-
 .tweet-body.container-fluid{
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -76,16 +68,6 @@ span{
     border-right-style: solid;
     border-bottom-style: solid;
     border-width: 1px;
-}
-
-img.card-img-top{
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-radius: 35px;
-    max-width: 80%;
-    max-height: 600px;
-    margin:auto;
-    display:block;
 }
 
 p.card-text{
@@ -100,11 +82,34 @@ h3 a{
     margin-left: 10%;
 }
 
-.card{
-    background-color: rgb(30, 39, 50)
+img.card-img-top{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-radius: 35px;
+    max-width: 80%;
+    max-height: 600px;
+    margin:auto;
+    display:block;
 }
 
-.tweet{
+a.icons:link {
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.fa {
+    color: rgb(139, 152, 165);
+}
+
+.sub-buttons{
+    text-align:center;
+}
+
+span{
+    color: rgb(139, 152, 165)
+}
+
+.reply, .tweet{
     border-color: rgb(56, 68, 77);
     border-bottom-style: solid;
     border-left-style: solid;
@@ -113,7 +118,41 @@ h3 a{
     border-width: 1px;
 }
 
-.signup-login {
-    width: 25%
+.container.profile{
+    border-color: rgb(56, 68, 77);
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-top-style: solid;
+    border-width: 1px;
+    padding: 5% 10%;
 }
 
+h2{
+    display:inline
+}
+
+.profile-follow-btn{
+    display:inline;
+    float:right;
+}
+
+
+
+/* Right Column */
+
+.right-col{
+
+}
+
+.card{
+    background-color: rgb(30, 39, 50)
+}
+
+h5 {
+    color: rgb(247, 249, 249);
+}
+
+h5.card-title{
+    padding: 16px;
+}
