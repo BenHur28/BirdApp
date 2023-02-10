@@ -11,18 +11,23 @@
                     {{ user.username }}
                 </h2>
                 {% if current_user != user %}
-                    {% if not current_user.is_following(user) %}
-                    <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}"
-                          class="profile-follow-btn">
-                        <button type="submit" class="btn btn-primary">Follow</button>
-                    </form>
-                    {% else %}
-                    <form method="POST" action="{{ url_for('views.unfollow_profile', user_id=user.id) }}"
-                          class="profile-follow-btn">
-                        <button type="submit" class="btn btn-primary">Unfollow</button>
-                    </form>
-                    {% endif %}
+                {% if not current_user.is_following(user) %}
+                <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}"
+                      class="profile-follow-btn">
+                    <button type="submit" class="btn btn-primary">Follow</button>
+                </form>
+                {% else %}
+                <form method="POST" action="{{ url_for('views.unfollow_profile', user_id=user.id) }}"
+                      class="profile-follow-btn">
+                    <button type="submit" class="btn btn-primary">Unfollow</button>
+                </form>
                 {% endif %}
+                {% endif %}
+                <p class="follow"><a
+                        href="{{ url_for('views.view_following', user_id=user.id) }}" class="follow">{{user.followed.count()}}
+                    Following</a><a
+                        href="{{ url_for('views.view_followers', user_id=user.id) }}"
+                        class="follow"> {{user.following.count()}} Followers</a></p>
             </div>
             {% for tweet in tweets %}
             <div class="tweet-body container-fluid">

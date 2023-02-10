@@ -137,7 +137,16 @@ h2{
     float:right;
 }
 
+p.follow{
+    line-height: 3rem;
+}
 
+a.follow{
+    background-color: transparent;
+    text-decoration: none;
+    color: rgb(139, 152, 165);
+    padding-right: 3%;
+}
 
 /* Right Column */
 

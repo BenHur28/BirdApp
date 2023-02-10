@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for, request, redirect
 from flask_login import current_user
-from .models import Tweets, User, Replies
+from .models import *
 from . import db
 
 import random
@@ -50,23 +50,22 @@ def view_profile(user_id):
     return render_template("profile.html", user=user_query, users=users, tweets=list_of_tweets)
 
 
-@views.route('/<int:user_id>', methods=['POST'])
+@views.route('/follow/<int:user_id>', methods=['POST'])
 def follow_profile(user_id):
     user = User.query.get(user_id)
     if request.method == 'POST':
         current_user.follow(user)
         db.session.commit()
-        return redirect(url_for('views.home', current_user=current_user))
+        return redirect(url_for('views.home'))
 
 
-@views.route('/profile_unfollow/<int:user_id>', methods=['POST'])
+@views.route('/unfollow/<int:user_id>', methods=['POST'])
 def unfollow_profile(user_id):
     user = User.query.get(user_id)
     if request.method == 'POST':
         current_user.unfollow(user)
-        print("hello")
         db.session.commit()
-        return redirect(url_for('views.home', current_user=current_user))
+        return redirect(url_for('views.home'))
 
 
 @views.route('/reply/<int:tweet_id>', methods=['GET', 'POST'])
@@ -93,3 +92,23 @@ def delete_tweet(tweet_id):
     db.session.delete(tweet_to_delete)
     db.session.commit()
     return redirect(url_for('views.home'))
+
+
+@views.route('/profile/<int:user_id>/following')
+def view_following(user_id):
+    user = User.query.get(user_id)
+    list_of_following = []
+    for following_user in user.followed:
+        f_user = User.query.get(following_user.id)
+        list_of_following.append(f_user)
+    return render_template("following.html", followings=list_of_following)
+
+
+@views.route('/profile/<int:user_id>/followers')
+def view_followers(user_id):
+    user = User.query.get(user_id)
+    list_of_followers = []
+    for follower_user in user.following:
+        f_user = User.query.get(follower_user.id)
+        list_of_followers.append(f_user)
+    return render_template("followers.html", followers=list_of_followers)
