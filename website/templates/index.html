@@ -14,7 +14,8 @@
                     <br>
                     <label for="image-url" class="form-label">Image URL:</label>
                     <div class="input-group mb-3">
-                        <input type="text" name="image_src" class="form-control" id="image-url" aria-label="Sizing example input"
+                        <input type="text" name="image_src" class="form-control" id="image-url"
+                               aria-label="Sizing example input"
                                aria-describedby="inputGroup-sizing-default">
                     </div>
                     <button type="submit" class="btn btn-primary tweet">Tweet</button>
@@ -35,7 +36,7 @@
                 {% if tweet.user_id == current_user.id %}
                 <div class="row">
                     <div class="col-3 sub-buttons">
-                        <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
+                        <a class="icons" href="{{ url_for('views.view_tweet', tweet_id=tweet.id) }}">
                             <i class="fa fa-regular fa-comment"></i>
                             <span>{{tweet.replies|length}}</span>
                         </a>
@@ -60,7 +61,7 @@
                     {% else %}
                     <div class="row">
                         <div class="col-4 sub-buttons">
-                            <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
+                            <a class="icons" href="{{ url_for('views.view_tweet', tweet_id=tweet.id) }}">
                                 <i class="fa fa-regular fa-comment"></i>
                                 <span>{{tweet.replies|length}}</span>
                             </a>

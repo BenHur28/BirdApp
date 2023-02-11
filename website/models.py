@@ -12,11 +12,6 @@ followings = db.Table('followings',
                       db.Column('follower_id', db.Integer, db.ForeignKey('user.id'))
                       )
 
-replied = db.Table('replied',
-                   db.Column('parent_reply_id', db.Integer, db.ForeignKey('replies.id')),
-                   db.Column('child_reply_id', db.Integer, db.ForeignKey('replies.id'))
-                   )
-
 
 class User(UserMixin, db.Model):
     __tablename__ = "user"
@@ -71,7 +66,7 @@ class Tweets(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     tweet_author = relationship("User", back_populates="tweets")
 
-    replies = relationship("Replies", back_populates="parent_tweet")
+    replies = relationship("Replies", back_populates="parent_tweet", cascade="all, delete, delete-orphan")
 
 
 class Replies(db.Model):
@@ -85,13 +80,5 @@ class Replies(db.Model):
     reply_author = relationship("User", back_populates="replies")
     parent_tweet = relationship("Tweets", back_populates="replies")
 
-    replies = db.relationship('Replies', secondary=replied,
-                              primaryjoin=(replied.c.parent_reply_id == id),
-                              secondaryjoin=(replied.c.child_reply_id == id),
-                              backref=db.backref('replied', lazy='dynamic'), lazy='dynamic')
-
-    def add_reply(self, reply):
-        self.replied.append(reply)
-
-    def delete_reply(self, reply):
-        self.replied.remove(reply)
+    parent_id = db.Column(db.Integer, db.ForeignKey('replies.id'))
+    replies = db.relationship("Replies", backref=db.backref('parent', remote_side=[id]), lazy='dynamic', cascade="all, delete, delete-orphan")

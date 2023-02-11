@@ -4,7 +4,7 @@
 {% block body %}
 <div class="container content">
     <div class="row">
-        <div class="col-2">Hello {{ current_user.username }}</div>
+        <div class="col-2 left-col">Hello {{ current_user.username }}</div>
         <div class="col-6">
             <div class="tweet-body container-fluid">
                 <h3>
@@ -18,7 +18,7 @@
                 {% endif %}
                 <div class="row">
                     <div class="col-4 sub-buttons">
-                        <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
+                        <a class="icons" href="{{ url_for('views.view_tweet', tweet_id=tweet.id) }}">
                             <i class="fa fa-regular fa-comment"></i>
                             <span>{{tweet.replies|length}}</span>
                         </a>
@@ -69,7 +69,7 @@
                     <div class="col-3 sub-buttons">
                         <a class="icons" href="{{ url_for('views.reply_to_reply', reply_id=replies.id) }}">
                             <i class="fa fa-regular fa-comment"></i>
-                            <span>{{replies.replied.count()}}</span>
+                            <span>0</span>
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
@@ -94,7 +94,7 @@
                         <div class="col-4 sub-buttons">
                             <a class="icons" href="{{ url_for('views.reply_to_reply', reply_id=replies.id) }}">
                                 <i class="fa fa-regular fa-comment"></i>
-                                <span>{{replies.replied.count()}}</span>
+                                <span>0</span>
                             </a>
                         </div>
                         <div class="col-4 sub-buttons">
@@ -112,10 +112,9 @@
                         {% endif %}
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-
-            <div class="col-4">
+            <div class="col-4 right-col">
                 <div class="card">
                     <h5 class="card-title">Who to follow</h5>
                     {% for user in users %}
@@ -128,6 +127,7 @@
                     </div>
                     {% endfor %}
                 </div>
+            </div>
             </div>
         </div>
     </div>

@@ -68,8 +68,8 @@ def unfollow_profile(user_id):
         return redirect(url_for('views.home'))
 
 
-@views.route('/reply/<int:tweet_id>', methods=['GET', 'POST'])
-def reply(tweet_id):
+@views.route('/tweet/<int:tweet_id>', methods=['GET', 'POST'])
+def view_tweet(tweet_id):
     tweet = Tweets.query.get(tweet_id)
     users = []
     for x in range(1,5):
@@ -80,7 +80,8 @@ def reply(tweet_id):
         text_content = request.form.get('reply-text')
         new_reply = Replies(content=text_content,
                             reply_author=current_user,
-                            parent_tweet=tweet)
+                            parent_tweet=tweet,
+                            parent=None)
         db.session.add(new_reply)
         db.session.commit()
     return render_template("tweet.html", users=users, current_user=current_user, tweet=tweet)
@@ -89,20 +90,16 @@ def reply(tweet_id):
 @views.route('/replies/<int:reply_id>', methods=['GET', 'POST'])
 def reply_to_reply(reply_id):
     main_reply = Replies.query.get(reply_id)
-    list_of_replies = []
-    for replies in main_reply.replied:
-        add_reply = Replies.query.get(replies.id)
-        list_of_replies.append(add_reply)
     if request.method == 'POST':
         text_content = request.form.get('reply-text')
         new_reply = Replies(content=text_content,
                             reply_author=current_user,
-                            parent_tweet=None)
+                            parent_tweet=None,
+                            parent=main_reply)
         db.session.add(new_reply)
-        main_reply.add_reply(new_reply)
         db.session.commit()
         return redirect(url_for('views.reply_to_reply', reply_id=reply_id))
-    return render_template("reply.html", main_reply=main_reply, current_user=current_user, replies=list_of_replies)
+    return render_template("reply.html", main_reply=main_reply, current_user=current_user)
 
 
 @views.route('/delete_tweet/<int:tweet_id>')
