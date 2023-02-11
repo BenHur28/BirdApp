@@ -7,35 +7,7 @@
         <div class="col-2">Hello {{ current_user.username }}</div>
         <div class="col-6">
             <div class="tweet-body container-fluid">
-                <h3>
-                    <a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.tweet_author.username}}</a>
-                </h3>
-                <p class="card-text">{{ tweet.content }}</p>
-                {% if tweet.image_src %}
-                <img src="{{ tweet.image_src }}" onerror="this.style.display='none'" class="card-img-top">
-                {% else %}
-                <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
-                {% endif %}
-                <div class="row">
-                    <div class="col-4 sub-buttons">
-                        <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
-                            <i class="fa fa-regular fa-comment"></i>
-                            <span>{{tweet.replies|length}}</span>
-                        </a>
-                    </div>
-                    <div class="col-4 sub-buttons">
-                        <a class="icons" href="">
-                            <i class="fa fa fa-retweet"></i>
-                            <span>0</span>
-                        </a>
-                    </div>
-                    <div class="col-4 sub-buttons">
-                        <a class="icons" href="">
-                            <i class="fa fa-regular fa-heart"></i>
-                            <span>0</span>
-                        </a>
-                    </div>
-                </div>
+                <p>{{main_reply.content}}</p>
             </div>
             <div class="reply">
                 <form method="POST" enctype="multipart/form-data" id="reply-area">
@@ -52,24 +24,24 @@
                     <button type="submit" class="btn btn-primary tweet">Tweet</button>
                 </form>
             </div>
-            {% for replies in tweet.replies %}
+            {% for reply in replies %}
             <div class="tweet-body container-fluid">
                 <h3>
-                    <a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{replies.reply_author.username}}</a>
+                    <a href="{{ url_for('views.view_profile', user_id=reply.user_id) }}">{{reply.reply_author.username}}</a>
                 </h3>
-                <p class="card-text">{{ replies.content }}</p>
-                {% if replies.image_src %}
-                <img src="{{ replies.image_src }}" onerror="this.style.display='none'" class="card-img-top">
+                <p class="card-text">{{ reply.content }}</p>
+                {% if reply.image_src %}
+                <img src="{{ reply.image_src }}" onerror="this.style.display='none'" class="card-img-top">
                 {% else %}
                 <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
                 {% endif %}
 
-                {% if replies.user_id == current_user.id %}
+                {% if reply.user_id == current_user.id %}
                 <div class="row">
                     <div class="col-3 sub-buttons">
-                        <a class="icons" href="{{ url_for('views.reply_to_reply', reply_id=replies.id) }}">
+                        <a class="icons" href="{{ url_for('views.reply_to_reply', reply_id=reply.id) }}">
                             <i class="fa fa-regular fa-comment"></i>
-                            <span>{{replies.replied.count()}}</span>
+                            <span>{{reply.replied.count()}}</span>
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
@@ -85,16 +57,16 @@
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
-                        <a class="icons" href="{{ url_for('views.delete_reply', reply_id=replies.id) }}">
+                        <a class="icons" href="{{ url_for('views.delete_reply', reply_id=reply.id) }}">
                             <i class="fa fa-solid fa-x"></i>
                         </a>
                     </div>
                     {% else %}
                     <div class="row">
                         <div class="col-4 sub-buttons">
-                            <a class="icons" href="{{ url_for('views.reply_to_reply', reply_id=replies.id) }}">
+                            <a class="icons" href="{{ url_for('views.reply_to_reply', reply_id=reply.id) }}">
                                 <i class="fa fa-regular fa-comment"></i>
-                                <span>{{replies.replied.count()}}</span>
+                                <span>{{reply.replied.count()}}</span>
                             </a>
                         </div>
                         <div class="col-4 sub-buttons">
@@ -112,22 +84,20 @@
                         {% endif %}
                     </div>
                 </div>
-            </div>
             {% endfor %}
-
-            <div class="col-4">
-                <div class="card">
-                    <h5 class="card-title">Who to follow</h5>
-                    {% for user in users %}
-                    <div class="card-body">
-                        <h5>{{ user.username }}</h5>
-                        <p>With supporting text below as a natural lead-in to additional content.</p>
-                        <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}">
-                            <button type="submit" class="btn btn-primary">Follow</button>
-                        </form>
-                    </div>
-                    {% endfor %}
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <h5 class="card-title">Who to follow</h5>
+                {% for user in users %}
+                <div class="card-body">
+                    <h5>{{ user.username }}</h5>
+                    <p>With supporting text below as a natural lead-in to additional content.</p>
+                    <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}">
+                        <button type="submit" class="btn btn-primary">Follow</button>
+                    </form>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>

@@ -12,7 +12,11 @@
                     <textarea class="form-control" id="tweet-text" name="tweet-text"
                               rows="4" placeholder="What's Happening?"></textarea>
                     <br>
-                    <input type="text" name="image_src"/>
+                    <label for="image-url" class="form-label">Image URL:</label>
+                    <div class="input-group mb-3">
+                        <input type="text" name="image_src" class="form-control" id="image-url" aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-default">
+                    </div>
                     <button type="submit" class="btn btn-primary tweet">Tweet</button>
                 </form>
             </div>
@@ -33,7 +37,7 @@
                     <div class="col-3 sub-buttons">
                         <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
                             <i class="fa fa-regular fa-comment"></i>
-                            <span>0</span>
+                            <span>{{tweet.replies|length}}</span>
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
@@ -58,7 +62,7 @@
                         <div class="col-4 sub-buttons">
                             <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
                                 <i class="fa fa-regular fa-comment"></i>
-                                <span>0</span>
+                                <span>{{tweet.replies|length}}</span>
                             </a>
                         </div>
                         <div class="col-4 sub-buttons">
@@ -95,4 +99,4 @@
         </div>
     </div>
 </div>
-    {% endblock %}
+{% endblock %}

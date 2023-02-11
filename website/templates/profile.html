@@ -44,7 +44,7 @@
                     <div class="col-4 sub-buttons">
                         <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
                             <i class="fa fa-regular fa-comment"></i>
-                            <span>0</span>
+                            <span>{{tweet.replies|length}}</span>
                         </a>
                     </div>
                     <div class="col-4 sub-buttons">

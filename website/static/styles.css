@@ -40,8 +40,9 @@ p{
 
 /* Middle Column */
 
-#tweet-area{
-    margin: 0 10%
+#tweet-area, #reply-area{
+    margin: 0 10%;
+    padding-bottom: 5%;
 }
 
 textarea.form-control, textarea.form-control:focus{
@@ -53,6 +54,7 @@ textarea.form-control, textarea.form-control:focus{
     resize: none;
     border-width: 0px;
     -webkit-box-shadow: none;
+    padding: 0;
 }
 
 .form-control::placeholder {
@@ -99,6 +101,7 @@ a.icons:link {
 
 .fa {
     color: rgb(139, 152, 165);
+    padding-right: 5%;
 }
 
 .sub-buttons{
