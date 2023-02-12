@@ -12,6 +12,16 @@ followings = db.Table('followings',
                       db.Column('follower_id', db.Integer, db.ForeignKey('user.id'))
                       )
 
+likes = db.Table('likes',
+                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                 db.Column('tweet_id', db.Integer, db.ForeignKey('tweets.id'))
+                 )
+
+likes_reply = db.Table('likes_reply',
+                       db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                       db.Column('reply_id', db.Integer, db.ForeignKey('replies.id'))
+                       )
+
 
 class User(UserMixin, db.Model):
     __tablename__ = "user"
@@ -60,14 +70,28 @@ class Tweets(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(255))
     image_src = db.Column(db.String(255))
-    likes = db.Column(db.Integer, default=0)
     retweets_number = db.Column(db.Integer, default=0)
     is_retweet = db.Column(db.Boolean, default=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     tweet_author = relationship("User", back_populates="tweets")
-
     replies = relationship("Replies", back_populates="parent_tweet", cascade="all, delete, delete-orphan")
+
+    liked = db.relationship('User', secondary=likes,
+                            primaryjoin=(likes.c.tweet_id == id),
+                            secondaryjoin=(likes.c.user_id == User.id),
+                            backref=db.backref('likes', lazy='dynamic'), lazy='dynamic')
+
+    def like(self, user):
+        if not self.is_liked(user):
+            self.liked.append(user)
+
+    def unlike(self, user):
+        if self.is_liked(user):
+            self.liked.remove(user)
+
+    def is_liked(self, user):
+        return self.liked.filter(likes.c.user_id == user.id).count() > 0
 
 
 class Replies(db.Model):
@@ -75,7 +99,6 @@ class Replies(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(255))
     image_src = db.Column(db.String(255))
-    likes = db.Column(db.Integer, default=0)
     retweets_number = db.Column(db.Integer, default=0)
     is_retweet = db.Column(db.Boolean, default=False)
 
@@ -86,4 +109,21 @@ class Replies(db.Model):
     parent_tweet = relationship("Tweets", back_populates="replies")
 
     parent_id = db.Column(db.Integer, db.ForeignKey('replies.id'))
-    replies = db.relationship("Replies", backref=db.backref('parent', remote_side=[id]), lazy='dynamic', cascade="all, delete, delete-orphan")
+    replies = db.relationship("Replies", backref=db.backref('parent', remote_side=[id]), lazy='dynamic',
+                              cascade="all, delete, delete-orphan")
+
+    liked = db.relationship('User', secondary=likes_reply,
+                            primaryjoin=(likes_reply.c.reply_id == id),
+                            secondaryjoin=(likes_reply.c.user_id == User.id),
+                            backref=db.backref('likes_reply', lazy='dynamic'), lazy='dynamic')
+
+    def like(self, user):
+        if not self.is_liked(user):
+            self.liked.append(user)
+
+    def unlike(self, user):
+        if self.is_liked(user):
+            self.liked.remove(user)
+
+    def is_liked(self, user):
+        return self.liked.filter(likes_reply.c.user_id == user.id).count() > 0

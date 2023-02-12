@@ -68,6 +68,38 @@ def unfollow_profile(user_id):
         return redirect(url_for('views.home'))
 
 
+@views.route('/like_tweet/<int:tweet_id>')
+def like_tweet(tweet_id):
+    tweet = Tweets.query.get(tweet_id)
+    tweet.like(current_user)
+    db.session.commit()
+    return redirect(url_for('views.home'))
+
+
+@views.route('/unlike_tweet/<int:tweet_id>')
+def unlike_tweet(tweet_id):
+    tweet = Tweets.query.get(tweet_id)
+    tweet.unlike(current_user)
+    db.session.commit()
+    return redirect(url_for('views.home'))
+
+
+@views.route('/like_reply/<int:reply_id>')
+def like_reply(reply_id):
+    reply = Replies.query.get(reply_id)
+    reply.like(current_user)
+    db.session.commit()
+    return redirect(url_for('views.home'))
+
+
+@views.route('/unlike_reply/<int:reply_id>')
+def unlike_reply(reply_id):
+    reply = Replies.query.get(reply_id)
+    reply.unlike(current_user)
+    db.session.commit()
+    return redirect(url_for('views.home'))
+
+
 @views.route('/tweet/<int:tweet_id>', methods=['GET', 'POST'])
 def view_tweet(tweet_id):
     tweet = Tweets.query.get(tweet_id)

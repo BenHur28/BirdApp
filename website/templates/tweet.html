@@ -32,7 +32,7 @@
                     <div class="col-4 sub-buttons">
                         <a class="icons" href="">
                             <i class="fa fa-regular fa-heart"></i>
-                            <span>0</span>
+                            <span>{{tweet.liked.count()}}</span>
                         </a>
                     </div>
                 </div>
@@ -79,9 +79,9 @@
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
-                        <a class="icons" href="">
+                        <a class="icons" href="{{ url_for('views.like_reply', reply_id=replies.id) }}">
                             <i class="fa fa-regular fa-heart"></i>
-                            <span>{{replies.likes}}</span>
+                            <span>{{replies.liked.count()}}</span>
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
@@ -104,9 +104,9 @@
                             </a>
                         </div>
                         <div class="col-4 sub-buttons">
-                            <a class="icons" href="">
+                            <a class="icons" href="{{ url_for('views.like_reply', reply_id=replies.id) }}">
                                 <i class="fa fa-regular fa-heart"></i>
-                                <span>{{replies.likes}}</span>
+                                <span>{{replies.liked.count()}}</span>
                             </a>
                         </div>
                         {% endif %}
