@@ -104,12 +104,20 @@ a.icons:link {
     padding-right: 5%;
 }
 
+.heart-red{
+    color: rgb(249,24,128)
+}
+
 .sub-buttons{
     text-align:center;
 }
 
 span{
     color: rgb(139, 152, 165)
+}
+
+.red{
+    color: rgb(249,24,128)
 }
 
 .reply, .tweet{

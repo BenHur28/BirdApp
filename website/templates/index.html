@@ -48,10 +48,17 @@
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
+                        {% if tweet.is_liked(current_user) %}
+                        <a class="icons" href="{{ url_for('views.unlike_tweet', tweet_id=tweet.id) }}">
+                            <i class="fa fa-solid fa-heart heart-red"></i>
+                            <span class="red">{{tweet.liked.count()}}</span>
+                        </a>
+                        {% else %}
                         <a class="icons" href="{{ url_for('views.like_tweet', tweet_id=tweet.id) }}">
                             <i class="fa fa-regular fa-heart"></i>
                             <span>{{tweet.liked.count()}}</span>
                         </a>
+                        {% endif %}
                     </div>
                     <div class="col-3 sub-buttons">
                         <a class="icons" href="{{ url_for('views.delete_tweet', tweet_id=tweet.id) }}">
@@ -73,10 +80,17 @@
                             </a>
                         </div>
                         <div class="col-4 sub-buttons">
-                            <a class="icons" href="{{ url_for('views.like_tweet', tweet_id=tweet.id) }}">
-                                <i class="fa fa-regular fa-heart"></i>
-                                <span>{{tweet.liked.count()}}</span>
-                            </a>
+                        {% if tweet.is_liked(current_user) %}
+                        <a class="icons" href="{{ url_for('views.unlike_tweet', tweet_id=tweet.id) }}">
+                            <i class="fa fa-solid fa-heart heart-red"></i>
+                            <span class="red">{{tweet.liked.count()}}</span>
+                        </a>
+                        {% else %}
+                        <a class="icons" href="{{ url_for('views.like_tweet', tweet_id=tweet.id) }}">
+                            <i class="fa fa-regular fa-heart"></i>
+                            <span>{{tweet.liked.count()}}</span>
+                        </a>
+                        {% endif %}
                         </div>
                         {% endif %}
                     </div>
