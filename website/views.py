@@ -78,8 +78,10 @@ def view_tweet(tweet_id):
             users.append(user)
     if request.method == 'POST':
         text_content = request.form.get('reply-text')
+        image_src = request.form.get('image_src')
         new_reply = Replies(content=text_content,
                             reply_author=current_user,
+                            image_src=image_src,
                             parent_tweet=tweet,
                             parent=None)
         db.session.add(new_reply)
@@ -90,10 +92,13 @@ def view_tweet(tweet_id):
 @views.route('/replies/<int:reply_id>', methods=['GET', 'POST'])
 def reply_to_reply(reply_id):
     main_reply = Replies.query.get(reply_id)
+    print(main_reply.replies.count())
     if request.method == 'POST':
         text_content = request.form.get('reply-text')
+        image_src = request.form.get('image_src')
         new_reply = Replies(content=text_content,
                             reply_author=current_user,
+                            image_src=image_src,
                             parent_tweet=None,
                             parent=main_reply)
         db.session.add(new_reply)

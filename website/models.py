@@ -59,9 +59,10 @@ class Tweets(db.Model):
     __tablename__ = "tweets"
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(255))
-    likes = db.Column(db.Integer)
-    retweets = db.Column(db.Integer)
     image_src = db.Column(db.String(255))
+    likes = db.Column(db.Integer, default=0)
+    retweets_number = db.Column(db.Integer, default=0)
+    is_retweet = db.Column(db.Boolean, default=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     tweet_author = relationship("User", back_populates="tweets")
@@ -73,6 +74,10 @@ class Replies(db.Model):
     __tablename__ = "replies"
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(255))
+    image_src = db.Column(db.String(255))
+    likes = db.Column(db.Integer, default=0)
+    retweets_number = db.Column(db.Integer, default=0)
+    is_retweet = db.Column(db.Boolean, default=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     tweet_id = db.Column(db.Integer, db.ForeignKey("tweets.id"))
