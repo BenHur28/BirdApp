@@ -7,7 +7,35 @@
         <div class="col-2">Hello {{ current_user.username }}</div>
         <div class="col-6">
             <div class="tweet-body container-fluid">
-                <p>{{main_reply.content}}</p>
+                <h3>
+                    <a href="{{ url_for('views.view_profile', user_id=main_reply.user_id) }}">{{main_reply.reply_author.username}}</a>
+                </h3>
+                <p class="card-text">{{ main_reply.content }}</p>
+                {% if main_reply.image_src %}
+                <img src="{{ main_reply.image_src }}" onerror="this.style.display='none'" class="card-img-top">
+                {% else %}
+                <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
+                {% endif %}
+                <div class="row">
+                    <div class="col-4 sub-buttons">
+                        <a class="icons" href="">
+                            <i class="fa fa-regular fa-comment"></i>
+                            <span>{{main_reply.replies.count()}}</span>
+                        </a>
+                    </div>
+                    <div class="col-4 sub-buttons">
+                        <a class="icons" href="">
+                            <i class="fa fa fa-retweet"></i>
+                            <span>0</span>
+                        </a>
+                    </div>
+                    <div class="col-4 sub-buttons">
+                        <a class="icons" href="">
+                            <i class="fa fa-regular fa-heart"></i>
+                            <span>{{main_reply.liked.count()}}</span>
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="reply">
                 <form method="POST" enctype="multipart/form-data" id="reply-area">
