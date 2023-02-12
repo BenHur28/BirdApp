@@ -68,38 +68,6 @@ def unfollow_profile(user_id):
         return redirect(url_for('views.home'))
 
 
-@views.route('/like_tweet/<int:tweet_id>')
-def like_tweet(tweet_id):
-    tweet = Tweets.query.get(tweet_id)
-    tweet.like(current_user)
-    db.session.commit()
-    return redirect(url_for('views.home'))
-
-
-@views.route('/unlike_tweet/<int:tweet_id>')
-def unlike_tweet(tweet_id):
-    tweet = Tweets.query.get(tweet_id)
-    tweet.unlike(current_user)
-    db.session.commit()
-    return redirect(url_for('views.home'))
-
-
-@views.route('/like_reply/<int:reply_id>')
-def like_reply(reply_id):
-    reply = Replies.query.get(reply_id)
-    reply.like(current_user)
-    db.session.commit()
-    return redirect(url_for('views.home'))
-
-
-@views.route('/unlike_reply/<int:reply_id>')
-def unlike_reply(reply_id):
-    reply = Replies.query.get(reply_id)
-    reply.unlike(current_user)
-    db.session.commit()
-    return redirect(url_for('views.home'))
-
-
 @views.route('/tweet/<int:tweet_id>', methods=['GET', 'POST'])
 def view_tweet(tweet_id):
     tweet = Tweets.query.get(tweet_id)
@@ -139,22 +107,6 @@ def reply_to_reply(reply_id):
     return render_template("reply.html", main_reply=main_reply, current_user=current_user)
 
 
-@views.route('/delete_tweet/<int:tweet_id>')
-def delete_tweet(tweet_id):
-    tweet_to_delete = Tweets.query.get(tweet_id)
-    db.session.delete(tweet_to_delete)
-    db.session.commit()
-    return redirect(url_for('views.home'))
-
-
-@views.route('/delete_reply/<int:reply_id>')
-def delete_reply(reply_id):
-    reply_to_delete = Replies.query.get(reply_id)
-    db.session.delete(reply_to_delete)
-    db.session.commit()
-    return redirect(url_for('views.home'))
-
-
 @views.route('/profile/<int:user_id>/following')
 def view_following(user_id):
     user = User.query.get(user_id)
@@ -173,3 +125,51 @@ def view_followers(user_id):
         f_user = User.query.get(follower_user.id)
         list_of_followers.append(f_user)
     return render_template("followers.html", followers=list_of_followers)
+
+
+@views.route('/delete_tweet/<int:tweet_id>')
+def delete_tweet(tweet_id):
+    tweet_to_delete = Tweets.query.get(tweet_id)
+    db.session.delete(tweet_to_delete)
+    db.session.commit()
+    return redirect(url_for('views.home'))
+
+
+@views.route('/delete_reply/<int:reply_id>')
+def delete_reply(reply_id):
+    reply_to_delete = Replies.query.get(reply_id)
+    db.session.delete(reply_to_delete)
+    db.session.commit()
+    return redirect(url_for('views.home'))
+
+
+@views.route('/like_tweet/<int:tweet_id>')
+def like_tweet(tweet_id):
+    tweet = Tweets.query.get(tweet_id)
+    tweet.like(current_user)
+    db.session.commit()
+    return redirect(url_for('views.view_tweet', tweet_id=tweet_id))
+
+
+@views.route('/unlike_tweet/<int:tweet_id>')
+def unlike_tweet(tweet_id):
+    tweet = Tweets.query.get(tweet_id)
+    tweet.unlike(current_user)
+    db.session.commit()
+    return redirect(url_for('views.view_tweet', tweet_id=tweet_id))
+
+
+@views.route('/like_reply/<int:reply_id>')
+def like_reply(reply_id):
+    reply = Replies.query.get(reply_id)
+    reply.like(current_user)
+    db.session.commit()
+    return redirect(url_for('views.reply_to_reply', reply_id=reply_id))
+
+
+@views.route('/unlike_reply/<int:reply_id>')
+def unlike_reply(reply_id):
+    reply = Replies.query.get(reply_id)
+    reply.unlike(current_user)
+    db.session.commit()
+    return redirect(url_for('views.reply_to_reply',reply_id=reply_id))
