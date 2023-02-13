@@ -22,6 +22,11 @@ likes_reply = db.Table('likes_reply',
                        db.Column('reply_id', db.Integer, db.ForeignKey('replies.id'))
                        )
 
+retweeted_tweet = db.Table('retweeted_tweet',
+                         db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                         db.Column('tweet_id', db.Integer, db.ForeignKey('tweets.id'))
+                         )
+
 
 class User(UserMixin, db.Model):
     __tablename__ = "user"
@@ -71,21 +76,25 @@ class Tweets(db.Model):
     content = db.Column(db.String(255))
     image_src = db.Column(db.String(255))
     is_retweet = db.Column(db.Boolean, default=False)
+    is_quote_retweet = db.Column(db.Boolean, default=False)
+    retweet_count = db.Column(db.Integer, default=0)
     original_author = db.Column(db.String(255))
     original_author_id = db.Column(db.Integer)
+    original_id = db.Column(db.Integer)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     tweet_author = relationship("User", back_populates="tweets")
     replies = relationship("Replies", back_populates="parent_tweet", cascade="all, delete, delete-orphan")
 
-    parent_id = db.Column(db.Integer, db.ForeignKey('tweets.id'))
-    retweet = db.relationship("Tweets", backref=db.backref('main_tweet', remote_side=[id]), lazy='dynamic',
-                              cascade="all, delete, delete-orphan")
-
     liked = db.relationship('User', secondary=likes,
                             primaryjoin=(likes.c.tweet_id == id),
                             secondaryjoin=(likes.c.user_id == User.id),
                             backref=db.backref('likes', lazy='dynamic'), lazy='dynamic')
+
+    retweeted = db.relationship('User', secondary=retweeted_tweet,
+                                primaryjoin=(retweeted_tweet.c.tweet_id == id),
+                                secondaryjoin=(retweeted_tweet.c.user_id == User.id),
+                                backref=db.backref('retweeted_tweet', lazy='dynamic'), lazy='dynamic')
 
     def like(self, user):
         if not self.is_liked(user):
@@ -98,6 +107,17 @@ class Tweets(db.Model):
     def is_liked(self, user):
         return self.liked.filter(likes.c.user_id == user.id).count() > 0
 
+    def retweet(self, user):
+        if not self.is_retweeted(user):
+            self.retweeted.append(user)
+
+    def un_retweet(self, user):
+        if self.is_retweeted(user):
+            self.retweeted.remove(user)
+
+    def is_retweeted(self, user):
+        return self.retweeted.filter(retweeted_tweet.c.user_id == user.id).count() > 0
+
 
 class Replies(db.Model):
     __tablename__ = "replies"
@@ -105,8 +125,11 @@ class Replies(db.Model):
     content = db.Column(db.String(255))
     image_src = db.Column(db.String(255))
     is_retweet = db.Column(db.Boolean, default=False)
+    is_quote_retweet = db.Column(db.Boolean, default=False)
+    retweet_count = db.Column(db.Integer, default=0)
     original_author = db.Column(db.String(255))
     original_author_id = db.Column(db.Integer)
+    original_id = db.Column(db.Integer)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     tweet_id = db.Column(db.Integer, db.ForeignKey("tweets.id"))

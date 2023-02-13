@@ -105,11 +105,11 @@ a.icons:link {
 }
 
 .heart-red{
-    color: rgb(249,24,128)
+    color: rgb(249,24,128);
 }
 
 .retweet-green{
-    color: #00BA7C
+    color: #00BA7C;
 }
 
 .sub-buttons{
@@ -117,11 +117,15 @@ a.icons:link {
 }
 
 span{
-    color: rgb(139, 152, 165)
+    color: rgb(139, 152, 165);
 }
 
 .red{
-    color: rgb(249,24,128)
+    color: rgb(249,24,128);
+}
+
+.green{
+    color: #00BA7C;
 }
 
 .reply, .tweet{
