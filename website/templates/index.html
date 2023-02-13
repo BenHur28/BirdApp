@@ -23,9 +23,16 @@
             </div>
             {% for tweet in tweets %}
             <div class="tweet-body container-fluid">
+                {% if tweet.is_retweet %}
+                {{ tweet.tweet_author.username}}
                 <h3>
-                    <a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.tweet_author.username}}</a>
+                    <a href="{{ url_for('views.view_profile', user_id=tweet.original_author_id) }}">{{tweet.original_author}}</a>
                 </h3>
+                {% else %}
+                <h3>
+                    <a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.original_author}}</a>
+                </h3>
+                {% endif %}
                 <p class="card-text">{{ tweet.content }}</p>
                 {% if tweet.image_src %}
                 <img src="{{ tweet.image_src }}" onerror="this.style.display='none'" class="card-img-top">
@@ -42,9 +49,9 @@
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
-                        <a class="icons" href="">
+                        <a class="icons" href="{{ url_for('views.retweet_tweet', tweet_id=tweet.id) }}">
                             <i class="fa fa fa-retweet"></i>
-                            <span>{{tweet.retweets_number}}</span>
+                            <span>0</span>
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
@@ -74,23 +81,23 @@
                             </a>
                         </div>
                         <div class="col-4 sub-buttons">
-                            <a class="icons" href="">
+                            <a class="icons" href="{{ url_for('views.retweet_tweet', tweet_id=tweet.id) }}">
                                 <i class="fa fa fa-retweet"></i>
-                                <span>{{tweet.retweets_number}}</span>
+                                <span>0</span>
                             </a>
                         </div>
                         <div class="col-4 sub-buttons">
-                        {% if tweet.is_liked(current_user) %}
-                        <a class="icons" href="{{ url_for('views.unlike_tweet', tweet_id=tweet.id) }}">
-                            <i class="fa fa-solid fa-heart heart-red"></i>
-                            <span class="red">{{tweet.liked.count()}}</span>
-                        </a>
-                        {% else %}
-                        <a class="icons" href="{{ url_for('views.like_tweet', tweet_id=tweet.id) }}">
-                            <i class="fa fa-regular fa-heart"></i>
-                            <span>{{tweet.liked.count()}}</span>
-                        </a>
-                        {% endif %}
+                            {% if tweet.is_liked(current_user) %}
+                            <a class="icons" href="{{ url_for('views.unlike_tweet', tweet_id=tweet.id) }}">
+                                <i class="fa fa-solid fa-heart heart-red"></i>
+                                <span class="red">{{tweet.liked.count()}}</span>
+                            </a>
+                            {% else %}
+                            <a class="icons" href="{{ url_for('views.like_tweet', tweet_id=tweet.id) }}">
+                                <i class="fa fa-regular fa-heart"></i>
+                                <span>{{tweet.liked.count()}}</span>
+                            </a>
+                            {% endif %}
                         </div>
                         {% endif %}
                     </div>

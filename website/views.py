@@ -4,6 +4,7 @@ from .models import *
 from . import db
 
 import random
+
 views = Blueprint('views', __name__)
 
 
@@ -13,23 +14,24 @@ def home():
         return redirect(url_for('auth.login'))
 
     if request.method == 'POST':
-
         text_content = request.form.get('tweet-text')
         image_src = request.form.get('image_src')
         new_tweet = Tweets(content=text_content,
                            user_id=current_user.id,
-                           image_src=image_src)
+                           image_src=image_src,
+                           original_author=current_user.username,
+                           original_author_id=current_user.id)
         db.session.add(new_tweet)
         db.session.commit()
 
     users = []
-    for x in range(1,5):
+    for x in range(1, 5):
         user = random.choice(User.query.all())
         if (user not in users) and (user != current_user) and (not current_user.is_following(user)):
             users.append(user)
     list_of_tweets = []
     for tweet in current_user.followed_posts():
-        list_of_tweets.insert(0,tweet)
+        list_of_tweets.insert(0, tweet)
     return render_template("index.html", current_user=current_user, users=users, tweets=list_of_tweets)
 
 
@@ -38,12 +40,13 @@ def view_profile(user_id):
     user_query = User.query.get(user_id)
     list_of_tweets = []
     users = []
-    for x in range(1,5):
+    print("hello")
+    for x in range(1, 5):
         user = random.choice(User.query.all())
         if (user not in users) and (user != current_user) and (not current_user.is_following(user)):
             users.append(user)
     for tweet in user_query.tweets:
-        list_of_tweets.insert(0,tweet)
+        list_of_tweets.insert(0, tweet)
     if request.method == 'POST':
         current_user.follow(user_query)
         db.session.commit()
@@ -72,7 +75,7 @@ def unfollow_profile(user_id):
 def view_tweet(tweet_id):
     tweet = Tweets.query.get(tweet_id)
     users = []
-    for x in range(1,5):
+    for x in range(1, 5):
         user = random.choice(User.query.all())
         if (user not in users) and (user != current_user) and (not current_user.is_following(user)):
             users.append(user)
@@ -83,7 +86,9 @@ def view_tweet(tweet_id):
                             reply_author=current_user,
                             image_src=image_src,
                             parent_tweet=tweet,
-                            parent=None)
+                            parent=None,
+                            original_author=current_user.username,
+                            original_author_id=current_user.id)
         db.session.add(new_reply)
         db.session.commit()
     return render_template("tweet.html", users=users, current_user=current_user, tweet=tweet)
@@ -172,4 +177,33 @@ def unlike_reply(reply_id):
     reply = Replies.query.get(reply_id)
     reply.unlike(current_user)
     db.session.commit()
-    return redirect(url_for('views.reply_to_reply',reply_id=reply_id))
+    return redirect(url_for('views.reply_to_reply', reply_id=reply_id))
+
+
+@views.route('/retweet_tweet/<int:tweet_id>')
+def retweet_tweet(tweet_id):
+    tweet = Tweets.query.get(tweet_id)
+    new_tweet = Tweets(content=tweet.content,
+                       user_id=current_user.id,
+                       image_src=tweet.image_src,
+                       main_tweet=tweet,
+                       is_retweet=True,
+                       original_author=tweet.original_author,
+                       original_author_id=tweet.original_author_id)
+    db.session.add(new_tweet)
+    db.session.commit()
+    return redirect(url_for('views.home'))
+
+
+@views.route('/retweet_reply/<int:reply_id>')
+def retweet_reply(reply_id):
+    reply = Replies.query.get(reply_id)
+    new_tweet = Tweets(content=reply.content,
+                       user_id=current_user.id,
+                       image_src=reply.image_src,
+                       is_retweet=True,
+                       original_author=reply.original_author,
+                       original_author_id=reply.original_author_id)
+    db.session.add(new_tweet)
+    db.session.commit()
+    return redirect(url_for('views.home'))

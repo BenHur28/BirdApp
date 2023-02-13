@@ -16,20 +16,22 @@
                 {% else %}
                 <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
                 {% endif %}
+
+                {% if main_reply.user_id == current_user.id %}
                 <div class="row">
-                    <div class="col-4 sub-buttons">
-                        <a class="icons" href="">
+                    <div class="col-3 sub-buttons">
+                        <a class="icons" href="{{ url_for('views.reply_to_reply', reply_id=main_reply.id) }}">
                             <i class="fa fa-regular fa-comment"></i>
                             <span>{{main_reply.replies.count()}}</span>
                         </a>
                     </div>
-                    <div class="col-4 sub-buttons">
-                        <a class="icons" href="">
+                    <div class="col-3 sub-buttons">
+                        <a class="icons" href="{{ url_for('views.retweet_reply', reply_id=main_reply.id) }}">
                             <i class="fa fa fa-retweet"></i>
-                            <span>0</span>
+                            <span>{{main_reply.retweets_number}}</span>
                         </a>
                     </div>
-                    <div class="col-4 sub-buttons">
+                    <div class="col-3 sub-buttons">
                         {% if main_reply.is_liked(current_user) %}
                         <a class="icons" href="{{ url_for('views.unlike_reply', reply_id=main_reply.id) }}">
                             <i class="fa fa-solid fa-heart heart-red"></i>
@@ -42,7 +44,40 @@
                         </a>
                         {% endif %}
                     </div>
-                </div>
+                    <div class="col-3 sub-buttons">
+                        <a class="icons" href="{{ url_for('views.delete_reply', reply_id=main_reply.id) }}">
+                            <i class="fa fa-solid fa-x"></i>
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="row">
+                        <div class="col-4 sub-buttons">
+                            <a class="icons" href="{{ url_for('views.reply_to_reply', reply_id=main_reply.id) }}">
+                                <i class="fa fa-regular fa-comment"></i>
+                                <span>{{main_reply.replies.count()}}</span>
+                            </a>
+                        </div>
+                        <div class="col-4 sub-buttons">
+                            <a class="icons" href="{{ url_for('views.retweet_reply', reply_id=main_reply.id) }}">
+                                <i class="fa fa fa-retweet"></i>
+                                <span>{{main_reply.retweets_number}}</span>
+                            </a>
+                        </div>
+                        <div class="col-4 sub-buttons">
+                        {% if main_reply.is_liked(current_user) %}
+                        <a class="icons" href="{{ url_for('views.unlike_reply', reply_id=main_reply.id) }}">
+                            <i class="fa fa-solid fa-heart heart-red"></i>
+                            <span class="red">{{main_reply.liked.count()}}</span>
+                        </a>
+                        {% else %}
+                        <a class="icons" href="{{ url_for('views.like_reply', reply_id=main_reply.id) }}">
+                            <i class="fa fa-regular fa-heart"></i>
+                            <span>{{main_reply.liked.count()}}</span>
+                        </a>
+                        {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
             </div>
             <div class="reply">
                 <form method="POST" enctype="multipart/form-data" id="reply-area">

@@ -11,17 +11,17 @@
                     {{ user.username }}
                 </h2>
                 {% if current_user != user %}
-                {% if not current_user.is_following(user) %}
-                <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}"
-                      class="profile-follow-btn">
-                    <button type="submit" class="btn btn-primary">Follow</button>
-                </form>
-                {% else %}
-                <form method="POST" action="{{ url_for('views.unfollow_profile', user_id=user.id) }}"
-                      class="profile-follow-btn">
-                    <button type="submit" class="btn btn-primary">Unfollow</button>
-                </form>
-                {% endif %}
+                    {% if not current_user.is_following(user) %}
+                    <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}"
+                          class="profile-follow-btn">
+                        <button type="submit" class="btn btn-primary">Follow</button>
+                    </form>
+                    {% else %}
+                    <form method="POST" action="{{ url_for('views.unfollow_profile', user_id=user.id) }}"
+                          class="profile-follow-btn">
+                        <button type="submit" class="btn btn-primary">Unfollow</button>
+                    </form>
+                    {% endif %}
                 {% endif %}
                 <p class="follow"><a
                         href="{{ url_for('views.view_following', user_id=user.id) }}" class="follow">{{user.followed.count()}}
@@ -31,9 +31,16 @@
             </div>
             {% for tweet in tweets %}
             <div class="tweet-body container-fluid">
+                {% if tweet.is_retweet %}
+                {{ tweet.tweet_author.username}}
                 <h3>
-                    <a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.tweet_author.username}}</a>
+                    <a href="{{ url_for('views.view_profile', user_id=tweet.original_author_id) }}">{{tweet.original_author}}</a>
                 </h3>
+                {% else %}
+                <h3>
+                    <a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.original_author}}</a>
+                </h3>
+                {% endif %}
                 <p class="card-text">{{ tweet.content }}</p>
                 {% if tweet.image_src %}
                 <img src="{{ tweet.image_src }}" onerror="this.style.display='none'" class="card-img-top">
@@ -42,7 +49,7 @@
                 {% endif %}
                 <div class="row">
                     <div class="col-4 sub-buttons">
-                        <a class="icons" href="{{ url_for('views.reply', tweet_id=tweet.id) }}">
+                        <a class="icons" href="{{ url_for('views.view_tweet', tweet_id=tweet.id) }}">
                             <i class="fa fa-regular fa-comment"></i>
                             <span>{{tweet.replies|length}}</span>
                         </a>
