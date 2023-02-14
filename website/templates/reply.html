@@ -27,8 +27,13 @@
                     </div>
                     <div class="col-3 sub-buttons">
                         <a class="icons" href="{{ url_for('views.quote_retweet_reply', reply_id=main_reply.id) }}">
+                            {% if main_reply.is_retweeted(current_user) %}
+                            <i class="fa fa fa-retweet retweet-green"></i>
+                            <span class="green">{{main_reply.retweet_count}}</span>
+                            {% else %}
                             <i class="fa fa fa-retweet"></i>
-                            <span>{{main_reply.retweets_number}}</span>
+                            <span>{{main_reply.retweet_count}}</span>
+                            {% endif %}
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
@@ -59,129 +64,140 @@
                         </div>
                         <div class="col-4 sub-buttons">
                             <a class="icons" href="{{ url_for('views.quote_retweet_reply', reply_id=main_reply.id) }}">
+                                {% if main_reply.is_retweeted(current_user) %}
+                                <i class="fa fa fa-retweet retweet-green"></i>
+                                <span class="green">{{main_reply.retweet_count}}</span>
+                                {% else %}
                                 <i class="fa fa fa-retweet"></i>
-                                <span>{{main_reply.retweets_number}}</span>
+                                <span>{{main_reply.retweet_count}}</span>
+                                {% endif %}
                             </a>
                         </div>
                         <div class="col-4 sub-buttons">
-                        {% if main_reply.is_liked(current_user) %}
-                        <a class="icons" href="{{ url_for('views.unlike_reply', reply_id=main_reply.id) }}">
-                            <i class="fa fa-solid fa-heart heart-red"></i>
-                            <span class="red">{{main_reply.liked.count()}}</span>
-                        </a>
-                        {% else %}
-                        <a class="icons" href="{{ url_for('views.like_reply', reply_id=main_reply.id) }}">
-                            <i class="fa fa-regular fa-heart"></i>
-                            <span>{{main_reply.liked.count()}}</span>
-                        </a>
-                        {% endif %}
+                            {% if main_reply.is_liked(current_user) %}
+                            <a class="icons" href="{{ url_for('views.unlike_reply', reply_id=main_reply.id) }}">
+                                <i class="fa fa-solid fa-heart heart-red"></i>
+                                <span class="red">{{main_reply.liked.count()}}</span>
+                            </a>
+                            {% else %}
+                            <a class="icons" href="{{ url_for('views.like_reply', reply_id=main_reply.id) }}">
+                                <i class="fa fa-regular fa-heart"></i>
+                                <span>{{main_reply.liked.count()}}</span>
+                            </a>
+                            {% endif %}
                         </div>
                         {% endif %}
                     </div>
-            </div>
-            <div class="reply">
-                <form method="POST" enctype="multipart/form-data" id="reply-area">
-                    <label for="tweet-text" class="form-label"></label>
-                    <textarea class="form-control" id="tweet-text" name="reply-text"
-                              rows="3" placeholder="Tweet your reply"></textarea>
-                    <br>
-                    <label for="image-url" class="form-label">Image URL:</label>
-                    <div class="input-group mb-3">
-                        <input type="text" name="image_src" class="form-control" id="image-url"
-                               aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <button type="submit" class="btn btn-primary tweet">Tweet</button>
-                </form>
-            </div>
-            {% for replies in main_reply.replies %}
-            <div class="tweet-body container-fluid">
-                <h3>
-                    <a href="{{ url_for('views.view_profile', user_id=replies.user_id) }}">{{replies.reply_author.username}}</a>
-                </h3>
-                <p class="card-text">{{ replies.content }}</p>
-                {% if replies.image_src %}
-                <img src="{{ replies.image_src }}" onerror="this.style.display='none'" class="card-img-top">
-                {% else %}
-                <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
-                {% endif %}
-
-                {% if replies.user_id == current_user.id %}
-                <div class="row">
-                    <div class="col-3 sub-buttons">
-                        <a class="icons" href="{{ url_for('views.reply_to_reply', reply_id=replies.id) }}">
-                            <i class="fa fa-regular fa-comment"></i>
-                            <span>{{replies.replies.count()}}</span>
-                        </a>
-                    </div>
-                    <div class="col-3 sub-buttons">
-                        <a class="icons" href="">
-                            <i class="fa fa fa-retweet"></i>
-                            <span>{{replies.retweets_number}}</span>
-                        </a>
-                    </div>
-                    <div class="col-3 sub-buttons">
-                        {% if replies.is_liked(current_user) %}
-                        <a class="icons" href="{{ url_for('views.unlike_reply', reply_id=replies.id) }}">
-                            <i class="fa fa-solid fa-heart heart-red"></i>
-                            <span class="red">{{replies.liked.count()}}</span>
-                        </a>
-                        {% else %}
-                        <a class="icons" href="{{ url_for('views.like_reply', reply_id=replies.id) }}">
-                            <i class="fa fa-regular fa-heart"></i>
-                            <span>{{replies.liked.count()}}</span>
-                        </a>
-                        {% endif %}
-                    </div>
-                    <div class="col-3 sub-buttons">
-                        <a class="icons" href="{{ url_for('views.delete_reply', reply_id=replies.id) }}">
-                            <i class="fa fa-solid fa-x"></i>
-                        </a>
-                    </div>
+                </div>
+                <div class="reply">
+                    <form method="POST" enctype="multipart/form-data" id="reply-area">
+                        <label for="tweet-text" class="form-label"></label>
+                        <textarea class="form-control" id="tweet-text" name="reply-text"
+                                  rows="3" placeholder="Tweet your reply"></textarea>
+                        <br>
+                        <label for="image-url" class="form-label">Image URL:</label>
+                        <div class="input-group mb-3">
+                            <input type="text" name="image_src" class="form-control" id="image-url"
+                                   aria-label="Sizing example input"
+                                   aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <button type="submit" class="btn btn-primary tweet">Tweet</button>
+                    </form>
+                </div>
+                {% for replies in main_reply.replies %}
+                <div class="tweet-body container-fluid">
+                    <h3>
+                        <a href="{{ url_for('views.view_profile', user_id=replies.user_id) }}">{{replies.reply_author.username}}</a>
+                    </h3>
+                    <p class="card-text">{{ replies.content }}</p>
+                    {% if replies.image_src %}
+                    <img src="{{ replies.image_src }}" onerror="this.style.display='none'" class="card-img-top">
                     {% else %}
+                    <img src="Error.src" onerror="this.style.display='none'" class="card-img-top">
+                    {% endif %}
+
+                    {% if replies.user_id == current_user.id %}
                     <div class="row">
-                        <div class="col-4 sub-buttons">
+                        <div class="col-3 sub-buttons">
                             <a class="icons" href="{{ url_for('views.reply_to_reply', reply_id=replies.id) }}">
                                 <i class="fa fa-regular fa-comment"></i>
                                 <span>{{replies.replies.count()}}</span>
                             </a>
                         </div>
-                        <div class="col-4 sub-buttons">
-                            <a class="icons" href="">
-                                <i class="fa fa fa-retweet"></i>
-                                <span>{{replies.retweets_number}}</span>
+                        <div class="col-3 sub-buttons">
+                            <a class="icons" href="{{ url_for('views.quote_retweet_reply', reply_id=replies.id) }}">
+                                {% if replies.is_retweeted(current_user) %}
+                                    <i class="fa fa fa-retweet retweet-green"></i>
+                                    <span class="green">{{replies.retweet_count}}</span>
+                                {% else %}
+                                    <i class="fa fa fa-retweet"></i>
+                                    <span>{{replies.retweet_count}}</span>
+                                {% endif %}
                             </a>
                         </div>
-                        <div class="col-4 sub-buttons">
-                        {% if replies.is_liked(current_user) %}
-                        <a class="icons" href="{{ url_for('views.unlike_reply', reply_id=replies.id) }}">
-                            <i class="fa fa-solid fa-heart heart-red"></i>
-                            <span class="red">{{replies.liked.count()}}</span>
-                        </a>
-                        {% else %}
-                        <a class="icons" href="{{ url_for('views.like_reply', reply_id=replies.id) }}">
-                            <i class="fa fa-regular fa-heart"></i>
-                            <span>{{replies.liked.count()}}</span>
-                        </a>
-                        {% endif %}
+                        <div class="col-3 sub-buttons">
+                            {% if replies.is_liked(current_user) %}
+                            <a class="icons" href="{{ url_for('views.unlike_reply', reply_id=replies.id) }}">
+                                <i class="fa fa-solid fa-heart heart-red"></i>
+                                <span class="red">{{replies.liked.count()}}</span>
+                            </a>
+                            {% else %}
+                            <a class="icons" href="{{ url_for('views.like_reply', reply_id=replies.id) }}">
+                                <i class="fa fa-regular fa-heart"></i>
+                                <span>{{replies.liked.count()}}</span>
+                            </a>
+                            {% endif %}
                         </div>
-                        {% endif %}
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            <div class="col-4">
-                <div class="card">
-                    <h5 class="card-title">Who to follow</h5>
-                    {% for user in users %}
-                    <div class="card-body">
-                        <h5>{{ user.username }}</h5>
-                        <p>With supporting text below as a natural lead-in to additional content.</p>
-                        <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}">
-                            <button type="submit" class="btn btn-primary">Follow</button>
-                        </form>
+                        <div class="col-3 sub-buttons">
+                            <a class="icons" href="{{ url_for('views.delete_reply', reply_id=replies.id) }}">
+                                <i class="fa fa-solid fa-x"></i>
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="row">
+                            <div class="col-4 sub-buttons">
+                                <a class="icons" href="{{ url_for('views.reply_to_reply', reply_id=replies.id) }}">
+                                    <i class="fa fa-regular fa-comment"></i>
+                                    <span>{{replies.replies.count()}}</span>
+                                </a>
+                            </div>
+                            <div class="col-4 sub-buttons">
+                                <a class="icons" href="">
+                                    <i class="fa fa fa-retweet"></i>
+                                    <span>{{replies.retweets_number}}</span>
+                                </a>
+                            </div>
+                            <div class="col-4 sub-buttons">
+                                {% if replies.is_liked(current_user) %}
+                                <a class="icons" href="{{ url_for('views.unlike_reply', reply_id=replies.id) }}">
+                                    <i class="fa fa-solid fa-heart heart-red"></i>
+                                    <span class="red">{{replies.liked.count()}}</span>
+                                </a>
+                                {% else %}
+                                <a class="icons" href="{{ url_for('views.like_reply', reply_id=replies.id) }}">
+                                    <i class="fa fa-regular fa-heart"></i>
+                                    <span>{{replies.liked.count()}}</span>
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
                     {% endfor %}
+                </div>
+                <div class="col-4">
+                    <div class="card">
+                        <h5 class="card-title">Who to follow</h5>
+                        {% for user in users %}
+                        <div class="card-body">
+                            <h5>{{ user.username }}</h5>
+                            <p>With supporting text below as a natural lead-in to additional content.</p>
+                            <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}">
+                                <button type="submit" class="btn btn-primary">Follow</button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

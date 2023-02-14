@@ -29,7 +29,7 @@
                         href="{{ url_for('views.view_followers', user_id=user.id) }}"
                         class="follow"> {{user.following.count()}} Followers</a></p>
             </div>
-{% for tweet in tweets %}
+            {% for tweet in tweets %}
             <div class="tweet-body container-fluid">
                 {% if tweet.is_quote_retweet %}
                     <a href="">{{ tweet.tweet_author.username }} quote retweeted</a>
@@ -148,5 +148,6 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

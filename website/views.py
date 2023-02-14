@@ -105,7 +105,9 @@ def reply_to_reply(reply_id):
                             reply_author=current_user,
                             image_src=image_src,
                             parent_tweet=None,
-                            parent=main_reply)
+                            parent=main_reply,
+                            original_author=current_user.username,
+                            original_author_id=current_user.id)
         db.session.add(new_reply)
         db.session.commit()
         return redirect(url_for('views.reply_to_reply', reply_id=reply_id))

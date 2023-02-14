@@ -62,9 +62,15 @@
                         {% endif %}
                     </div>
                     <div class="col-3 sub-buttons">
+                        {% if tweet.is_retweet %}
+                        <a class="icons" href="{{ url_for('views.delete_retweet', tweet_id=tweet.id) }}">
+                            <i class="fa fa-solid fa-x"></i>
+                        </a>
+                        {% else %}
                         <a class="icons" href="{{ url_for('views.delete_tweet', tweet_id=tweet.id) }}">
                             <i class="fa fa-solid fa-x"></i>
                         </a>
+                        {% endif %}
                     </div>
                     {% else %}
                     <div class="row">
