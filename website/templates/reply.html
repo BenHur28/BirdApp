@@ -26,7 +26,7 @@
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
-                        <a class="icons" href="{{ url_for('views.retweet_reply', reply_id=main_reply.id) }}">
+                        <a class="icons" href="{{ url_for('views.quote_retweet_reply', reply_id=main_reply.id) }}">
                             <i class="fa fa fa-retweet"></i>
                             <span>{{main_reply.retweets_number}}</span>
                         </a>
@@ -58,7 +58,7 @@
                             </a>
                         </div>
                         <div class="col-4 sub-buttons">
-                            <a class="icons" href="{{ url_for('views.retweet_reply', reply_id=main_reply.id) }}">
+                            <a class="icons" href="{{ url_for('views.quote_retweet_reply', reply_id=main_reply.id) }}">
                                 <i class="fa fa fa-retweet"></i>
                                 <span>{{main_reply.retweets_number}}</span>
                             </a>
