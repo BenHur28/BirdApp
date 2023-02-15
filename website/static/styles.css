@@ -10,6 +10,10 @@ p{
     color: rgb(247, 249, 249);
 }
 
+span{
+    color: rgb(139, 152, 165);
+}
+
 /* Login and Signup Page */
 
 .signup-login {
@@ -94,6 +98,25 @@ img.card-img-top{
     display:block;
 }
 
+.dropdown-menu.show{
+    background-color: rgb(21,32,43);
+    box-shadow: rgb(136 153 166 / 20%) 0px 0px 15px, rgb(136 153 166 / 15%) 0px 0px 3px 1px;
+    padding: 0;
+}
+
+a div{
+   color: #F7F9F9;
+   font-size: 1rem;
+}
+
+li{
+    padding:10px;
+}
+
+li:hover{
+    background-color: rgba(255, 255, 255, 0.03)
+}
+
 a.icons:link {
     background-color: transparent;
     text-decoration: none;
@@ -101,6 +124,11 @@ a.icons:link {
 
 .fa {
     color: rgb(139, 152, 165);
+    padding-right: 5%;
+}
+
+.fa-white {
+    color: #F7F9F9;
     padding-right: 5%;
 }
 
@@ -114,10 +142,6 @@ a.icons:link {
 
 .sub-buttons{
     text-align:center;
-}
-
-span{
-    color: rgb(139, 152, 165);
 }
 
 .red{

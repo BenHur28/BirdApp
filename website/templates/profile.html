@@ -63,8 +63,8 @@
                     </div>
                     <div class="col-3 sub-buttons">
                         <a class="icons" href="{{ url_for('views.quote_retweet_tweet', tweet_id=tweet.id) }}">
-                            {% if tweet.is_retweeted(current_user) %}
-                            <i class="fa fa fa-retweet retweet-green"></i>
+                            {% if tweet.is_quote_retweeted(current_user) and not tweet.is_quote_retweet and not tweet.parent_id==None%}
+                            <i class="fa fa fa-retweet"></i>
                             <span class="green">{{tweet.retweet_count}}</span>
                             {% else %}
                             <i class="fa fa fa-retweet"></i>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="col-4 sub-buttons">
                             <a class="icons" href="{{ url_for('views.quote_retweet_tweet', tweet_id=tweet.id) }}">
-                                {% if tweet.is_retweeted(current_user) %}
+                                {% if tweet.is_quote_retweeted(current_user) %}
                                     <i class="fa fa fa-retweet retweet-green"></i>
                                     <span class="green">{{tweet.retweet_count}}</span>
                                 {% else %}

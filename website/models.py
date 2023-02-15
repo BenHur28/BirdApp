@@ -22,6 +22,16 @@ likes_reply = db.Table('likes_reply',
                        db.Column('reply_id', db.Integer, db.ForeignKey('replies.id'))
                        )
 
+retweeted_tweet = db.Table('retweeted_tweet',
+                           db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                           db.Column('tweet_id', db.Integer, db.ForeignKey('tweets.id'))
+                           )
+
+retweeted_reply = db.Table('retweeted_reply',
+                           db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                           db.Column('reply_id', db.Integer, db.ForeignKey('replies.id'))
+                           )
+
 quote_retweeted_tweet = db.Table('quote_retweeted_tweet',
                                  db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                                  db.Column('tweet_id', db.Integer, db.ForeignKey('tweets.id'))
@@ -98,6 +108,11 @@ class Tweets(db.Model):
                             secondaryjoin=(likes_tweet.c.user_id == User.id),
                             backref=db.backref('likes', lazy='dynamic'), lazy='dynamic')
 
+    retweeted = db.relationship('User', secondary=retweeted_tweet,
+                                primaryjoin=(retweeted_tweet.c.tweet_id == id),
+                                secondaryjoin=(retweeted_tweet.c.user_id == User.id),
+                                backref=db.backref('retweeted_tweet', lazy='dynamic'), lazy='dynamic')
+
     quote_retweeted = db.relationship('User', secondary=quote_retweeted_tweet,
                                       primaryjoin=(quote_retweeted_tweet.c.tweet_id == id),
                                       secondaryjoin=(quote_retweeted_tweet.c.user_id == User.id),
@@ -116,13 +131,24 @@ class Tweets(db.Model):
 
     def retweet(self, user):
         if not self.is_retweeted(user):
-            self.quote_retweeted.append(user)
+            self.retweeted.append(user)
 
     def un_retweet(self, user):
         if self.is_retweeted(user):
-            self.quote_retweeted.remove(user)
+            self.retweeted.remove(user)
 
     def is_retweeted(self, user):
+        return self.retweeted.filter(retweeted_tweet.c.user_id == user.id).count() > 0
+
+    def quote_retweet(self, user):
+        if not self.is_quote_retweeted(user):
+            self.quote_retweeted.append(user)
+
+    def un_quote_retweet(self, user):
+        if self.is_quote_retweeted(user):
+            self.quote_retweeted.remove(user)
+
+    def is_quote_retweeted(self, user):
         return self.quote_retweeted.filter(quote_retweeted_tweet.c.user_id == user.id).count() > 0
 
 
@@ -153,6 +179,11 @@ class Replies(db.Model):
                             secondaryjoin=(likes_reply.c.user_id == User.id),
                             backref=db.backref('likes_reply', lazy='dynamic'), lazy='dynamic')
 
+    retweeted = db.relationship('User', secondary=retweeted_reply,
+                                primaryjoin=(retweeted_reply.c.reply_id == id),
+                                secondaryjoin=(retweeted_reply.c.user_id == User.id),
+                                backref=db.backref('retweeted_reply', lazy='dynamic'), lazy='dynamic')
+
     quote_retweeted = db.relationship('User', secondary=quote_retweeted_reply,
                                       primaryjoin=(quote_retweeted_reply.c.reply_id == id),
                                       secondaryjoin=(quote_retweeted_reply.c.user_id == User.id),
@@ -171,11 +202,22 @@ class Replies(db.Model):
 
     def retweet(self, user):
         if not self.is_retweeted(user):
-            self.quote_retweeted.append(user)
+            self.retweeted.append(user)
 
     def un_retweet(self, user):
         if self.is_retweeted(user):
-            self.quote_retweeted.remove(user)
+            self.retweeted.remove(user)
 
     def is_retweeted(self, user):
+        return self.retweeted.filter(retweeted_reply.c.user_id == user.id).count() > 0
+
+    def quote_retweet(self, user):
+        if not self.is_quote_retweeted(user):
+            self.quote_retweeted.append(user)
+
+    def un_quote_retweet(self, user):
+        if self.is_quote_retweeted(user):
+            self.quote_retweeted.remove(user)
+
+    def is_quote_retweeted(self, user):
         return self.quote_retweeted.filter(quote_retweeted_reply.c.user_id == user.id).count() > 0

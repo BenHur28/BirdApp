@@ -24,19 +24,19 @@
             {% for tweet in tweets %}
             <div class="tweet-body container-fluid">
                 {% if tweet.is_quote_retweet %}
-                    <a href="">{{ tweet.tweet_author.username }} quote retweeted</a>
-                    <h3>
-                        <a href="{{ url_for('views.view_profile', user_id=tweet.original_author_id) }}">{{tweet.original_author}}</a>
-                    </h3>
-                {% elif tweet.is_retweet %}
-                    <a href="">{{ tweet.tweet_author.username }} retweeted</a>
-                    <h3>
-                        <a href="{{ url_for('views.view_profile', user_id=tweet.original_author_id) }}">{{tweet.original_author}}</a>
-                    </h3>
+                <a href="">{{ tweet.tweet_author.username }} quote retweeted</a>
+                <h3>
+                    <a href="{{ url_for('views.view_profile', user_id=tweet.original_author_id) }}">{{tweet.original_author}}</a>
+                </h3>
+                {% elif tweet.is_retweet and not tweet.is_quote_retweet %}
+                <a href="">{{ tweet.tweet_author.username }} retweeted</a>
+                <h3>
+                    <a href="{{ url_for('views.view_profile', user_id=tweet.original_author_id) }}">{{tweet.original_author}}</a>
+                </h3>
                 {% else %}
-                    <h3>
-                        <a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.original_author}}</a>
-                    </h3>
+                <h3>
+                    <a href="{{ url_for('views.view_profile', user_id=tweet.user_id) }}">{{tweet.original_author}}</a>
+                </h3>
                 {% endif %}
                 <p class="card-text">{{ tweet.content }}</p>
                 {% if tweet.image_src %}
@@ -54,15 +54,31 @@
                         </a>
                     </div>
                     <div class="col-3 sub-buttons">
-                        <a class="icons" href="{{ url_for('views.quote_retweet_tweet', tweet_id=tweet.id) }}">
-                            {% if tweet.is_retweeted(current_user) %}
-                            <i class="fa fa fa-retweet retweet-green"></i>
-                            <span class="green">{{tweet.retweet_count}}</span>
-                            {% else %}
-                            <i class="fa fa fa-retweet"></i>
-                            <span>{{tweet.retweet_count}}</span>
-                            {% endif %}
-                        </a>
+                        <div class="dropdown">
+                            <div type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if tweet.is_retweeted(current_user) or (tweet.is_retweet and tweet.user_id == current_user.id) %}
+                                <i class="fa fa-retweet retweet-green"></i>
+                                <span class="green">{{tweet.retweet_count}}</span>
+                                {% else %}
+                                <i class="fa fa-retweet"></i>
+                                <span>{{tweet.retweet_count}}</span>
+                                {% endif %}
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="icons"
+                                       href="{{ url_for('views.retweet_tweet', tweet_id=tweet.id) }}">
+                                        <div><i class="fa-white fa fa-retweet"></i>Retweet</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="icons"
+                                       href="{{ url_for('views.quote_retweet_tweet', tweet_id=tweet.id) }}">
+                                        <div><i class="fa-white fa-regular fa-pen-to-square"></i>Quote Retweet</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="col-3 sub-buttons">
                         {% if tweet.is_liked(current_user) %}
@@ -78,7 +94,7 @@
                         {% endif %}
                     </div>
                     <div class="col-3 sub-buttons">
-                        {% if tweet.is_retweet %}
+                        {% if tweet.is_retweet or tweet.is_quote_retweet %}
                         <a class="icons" href="{{ url_for('views.delete_retweet', tweet_id=tweet.id) }}">
                             <i class="fa fa-solid fa-x"></i>
                         </a>
@@ -97,15 +113,31 @@
                             </a>
                         </div>
                         <div class="col-4 sub-buttons">
-                            <a class="icons" href="{{ url_for('views.quote_retweet_tweet', tweet_id=tweet.id) }}">
-                                {% if tweet.is_retweeted(current_user) %}
-                                    <i class="fa fa fa-retweet retweet-green"></i>
+                            <div class="dropdown">
+                                <div type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {% if tweet.is_retweeted(current_user) or (tweet.is_retweet and tweet.user_id == current_user.id) %}
+                                    <i class="fa fa-retweet retweet-green"></i>
                                     <span class="green">{{tweet.retweet_count}}</span>
-                                {% else %}
-                                    <i class="fa fa fa-retweet"></i>
+                                    {% else %}
+                                    <i class="fa fa-retweet"></i>
                                     <span>{{tweet.retweet_count}}</span>
-                                {% endif %}
-                            </a>
+                                    {% endif %}
+                                </div>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="icons"
+                                           href="{{ url_for('views.retweet_tweet', tweet_id=tweet.id) }}">
+                                            <div><i class="fa-white fa fa-retweet"></i>Retweet</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="icons"
+                                           href="{{ url_for('views.quote_retweet_tweet', tweet_id=tweet.id) }}">
+                                            <div><i class="fa-white fa-regular fa-pen-to-square"></i>Quote Retweet</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                         <div class="col-4 sub-buttons">
                             {% if tweet.is_liked(current_user) %}
