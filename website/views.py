@@ -220,7 +220,7 @@ def retweet_tweet(tweet_id):
                        image_src=tweet.image_src,
                        is_retweet=True,
                        is_quote_retweet=False,
-                       retweet_count=tweet.retweet_count + 1,
+                       retweet_count=tweet.retweet_count,
                        original_author=tweet.original_author,
                        original_author_id=tweet.original_author_id,
                        original_id=tweet.original_id,
@@ -229,6 +229,7 @@ def retweet_tweet(tweet_id):
     tweet.retweet(current_user)
     if tweet.is_quote_retweet:
         db.session.query(Tweets).filter(Tweets.id == tweet_id).update({'retweet_count': Tweets.retweet_count + 1})
+        db.session.query(Tweets).filter(Tweets.id == new_tweet.id).update({'retweet_count': Tweets.retweet_count + 1})
     else:
         db.session.query(Tweets).filter(Tweets.original_id == tweet.original_id and not Tweets.is_quote_retweet).update({'retweet_count': Tweets.retweet_count + 1})
     db.session.commit()
