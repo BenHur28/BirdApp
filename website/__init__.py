@@ -12,9 +12,11 @@ DB_NAME = "birdapp.db"
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
+    # app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
+    # app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
     # app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}"
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+    app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
     db.init_app(app)
     login_manager = LoginManager()
     login_manager.init_app(app)
