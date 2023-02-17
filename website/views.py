@@ -151,8 +151,10 @@ def delete_retweet(tweet_id):
         parent_tweet = Replies.query.get(tweet_to_delete.parent_id)
     else:
         parent_tweet = Tweets.query.get(tweet_to_delete.parent_id)
-    tweet_to_un_retweet = Tweets.query.get(tweet_to_delete.parent_id)
-    tweet_to_un_retweet.un_retweet(current_user)
+    try:
+        un_retweet(tweet_to_delete)
+    except:
+        pass
     if tweet_to_delete.from_reply:
         if parent_tweet.is_quote_retweet:
             db.session.query(Tweets).filter(Tweets.id == tweet_to_delete.parent_id).update(
@@ -176,6 +178,31 @@ def delete_retweet(tweet_id):
     db.session.delete(tweet_to_delete)
     db.session.commit()
     return redirect(url_for('views.home'))
+
+
+def un_retweet(tweet):
+    if tweet.reply_to_reply:
+        parent_tweet = Replies.query.get(tweet.parent_id)
+    else:
+        parent_tweet = Tweets.query.get(tweet.parent_id)
+    if tweet.from_reply:
+        if tweet.is_quote_retweet:
+            tweet_to_un_retweet = Replies.query.get(tweet.original_id)
+            tweet_to_un_retweet.un_quote_retweet(current_user)
+        else:
+            if parent_tweet.is_quote_retweet:
+                tweet_to_un_retweet = Tweets.query.get(parent_tweet.id)
+                tweet_to_un_retweet.un_retweet(current_user)
+            else:
+                tweet_to_un_retweet = Replies.query.get(tweet.original_id)
+                tweet_to_un_retweet.un_retweet(current_user)
+    else:
+        if tweet.is_quote_retweet:
+            tweet_to_un_retweet = Tweets.query.get(tweet.original_id)
+            tweet_to_un_retweet.un_quote_retweet(current_user)
+        else:
+            tweet_to_un_retweet = Tweets.query.get(tweet.parent_id)
+            tweet_to_un_retweet.un_retweet(current_user)
 
 
 @views.route('/delete_reply/<int:reply_id>')
@@ -263,6 +290,7 @@ def retweet_reply(reply_id):
                        is_retweet=True,
                        is_quote_retweet=False,
                        from_reply=True,
+                       reply_to_reply=reply.reply_to_reply,
                        original_author=reply.original_author,
                        original_author_id=reply.original_author_id,
                        original_id=reply.original_id,
@@ -295,9 +323,14 @@ def quote_retweet_tweet(tweet_id):
         if tweet.is_retweet:
             db.session.query(Tweets).filter(Tweets.id == tweet_id).update({'retweet_count': Tweets.retweet_count + 1})
             db.session.query(Replies).filter(Replies.id == tweet.original_id).update({'retweet_count': Replies.retweet_count + 1})
+        elif tweet.is_quote_retweet:
+            db.session.query(Tweets).filter(Tweets.id == tweet_id).update({'retweet_count': Tweets.retweet_count + 1})
         else:
             db.session.query(Tweets).filter(Tweets.id == tweet.parent_id).update({'retweet_count': Tweets.retweet_count + 1})
     else:
+        if tweet.is_quote_retweet:
+            db.session.query(Tweets).filter(Tweets.id == tweet.id).update({'retweet_count': Tweets.retweet_count + 1})
+        else:
             db.session.query(Tweets).filter(Tweets.original_id == tweet.original_id).update({'retweet_count': Tweets.retweet_count + 1})
     db.session.add(new_tweet)
     tweet.quote_retweet(current_user)
@@ -308,7 +341,6 @@ def quote_retweet_tweet(tweet_id):
 @views.route('/quote_retweet_reply/<int:reply_id>')
 def quote_retweet_reply(reply_id):
     reply = Replies.query.get(reply_id)
-    # reply.is_quote_retweet = True;
     if reply.original_id is None:
         db.session.query(Replies).filter(Replies.id == reply_id).update({'original_id': reply.id})
         db.session.commit()

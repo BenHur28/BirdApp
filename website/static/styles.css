@@ -49,6 +49,16 @@ span{
     padding-bottom: 5%;
 }
 
+.author_header{
+    margin-left: 10%;
+    color: rgb(139, 152, 165);
+    text-decoration: none;
+}
+
+.author_header:hover{
+    text-decoration: underline;
+}
+
 textarea.form-control, textarea.form-control:focus{
     color: rgb(247, 249, 249);
     background-color: transparent;
@@ -77,7 +87,7 @@ textarea.form-control, textarea.form-control:focus{
 }
 
 p.card-text{
-    margin-left: 10%;
+    margin-left: 10.5%;
     margin-bottom: 5px;
 }
 
@@ -92,8 +102,8 @@ img.card-img-top{
     padding-top: 1rem;
     padding-bottom: 1rem;
     border-radius: 35px;
-    max-width: 80%;
-    max-height: 700px;
+    max-width: 70%;
+    max-height: 600px;
     margin:auto;
     display:block;
 }
@@ -131,6 +141,7 @@ a.icons:link {
     color: #F7F9F9;
     padding-right: 5%;
 }
+
 
 .heart-red{
     color: rgb(249,24,128);

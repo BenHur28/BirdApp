@@ -24,12 +24,12 @@
             {% for tweet in tweets %}
             <div class="tweet-body container-fluid">
                 {% if tweet.is_quote_retweet %}
-                <a href="">{{ tweet.tweet_author.username }} quote retweeted</a>
+                <a class="author_header" href="">{{ tweet.tweet_author.username }} quote retweeted</a>
                 <h3>
                     <a href="{{ url_for('views.view_profile', user_id=tweet.original_author_id) }}">{{tweet.original_author}}</a>
                 </h3>
                 {% elif tweet.is_retweet and not tweet.is_quote_retweet %}
-                <a href="">{{ tweet.tweet_author.username }} retweeted</a>
+                <a class="author_header" href="">{{ tweet.tweet_author.username }} retweeted</a>
                 <h3>
                     <a href="{{ url_for('views.view_profile', user_id=tweet.original_author_id) }}">{{tweet.original_author}}</a>
                 </h3>
@@ -141,12 +141,12 @@
                         </div>
                         <div class="col-4 sub-buttons">
                             {% if tweet.is_liked(current_user) %}
-                            <a class="icons" href="{{ url_for('views.unlike_tweet', tweet_id=tweet.id) }}">
+                            <a class="heart icons" href="{{ url_for('views.unlike_tweet', tweet_id=tweet.id) }}">
                                 <i class="fa fa-solid fa-heart heart-red"></i>
                                 <span class="red">{{tweet.liked.count()}}</span>
                             </a>
                             {% else %}
-                            <a class="icons" href="{{ url_for('views.like_tweet', tweet_id=tweet.id) }}">
+                            <a class="heart icons" href="{{ url_for('views.like_tweet', tweet_id=tweet.id) }}">
                                 <i class="fa fa-regular fa-heart"></i>
                                 <span>{{tweet.liked.count()}}</span>
                             </a>
@@ -163,7 +163,7 @@
                     {% for user in users %}
                     <div class="card-body">
                         <h5>{{ user.username }}</h5>
-                        <p>With supporting text below as a natural lead-in to additional content.</p>
+                        <p>Insert bio or profile text here in the future</p>
                         <form method="POST" action="{{ url_for('views.follow_profile', user_id=user.id) }}">
                             <button type="submit" class="btn btn-primary">Follow</button>
                         </form>
